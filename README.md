@@ -5,7 +5,7 @@
 <img width="1085" height="509" alt="image" src="https://github.com/user-attachments/assets/033f7a65-b476-4a93-b008-7786d31019f4" />
 
 <br>
-<b>OPENAI_API_KEY = "API_KEY" </b>  # openai(https://platform.openai.com/settings/organization/api-keys)에서 로그인 후  발급 <br>
+<b>OPENAI_API_KEY = "API_KEY" </b>  # openai(https://platform.openai.com/settings/organization/api-keys)에서 로그인 후  발급(모델 사용에 따른 비용 추가 발생할 수도있음) <br>
 <b>SERPER_API_KEY ="API_KEY"</b>   # serper(https://serper.dev)에서 계정 만든 후 무료api 키 발급<br><br>
 
 
