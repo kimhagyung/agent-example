@@ -6,7 +6,7 @@
 
 <br>
 <b>OPENAI_API_KEY = "API_KEY" </b>  # openai(https://platform.openai.com/settings/organization/api-keys)에서 로그인 후  발급 <br>
-<b>SERPER_API_KEY ="API_KEY"</b>   # serper(https://serper.dev)에서 계정 만든 후 무료api 키 발급<br>**
+<b>SERPER_API_KEY ="API_KEY"</b>   # serper(https://serper.dev)에서 계정 만든 후 무료api 키 발급<br>
 
 
 [실행방법]
