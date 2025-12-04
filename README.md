@@ -10,7 +10,7 @@
 
 
 ### <b>[실행방법]</b>
-터미널에 uv run main.py 입력 
+터미널에 **uv run main.py** 입력 
 
 ### <b>[결과]</b>
 output 파일
