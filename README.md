@@ -2,7 +2,7 @@
 
 ### **.env 환경 파일 구성**
 
-<img width="1085" height="509" alt="image" src="https://github.com/user-attachments/assets/21701be2-45cc-4c82-958f-1f10278d70ac" />
+<img width="1085" height="509" alt="image" src="https://github.com/user-attachments/assets/033f7a65-b476-4a93-b008-7786d31019f4" />
 
 <br>
 <b>OPENAI_API_KEY = "API_KEY" </b>  # openai(https://platform.openai.com/settings/organization/api-keys)에서 로그인 후  발급 <br>
