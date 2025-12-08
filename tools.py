@@ -85,7 +85,7 @@ def web_search_tool(query: str):
 
         if not content:
             continue
-
+ 
         # 불필요한 문자 제거
         cleaned = re.sub(r"\\+|\n+", " ", content).strip()
         cleaned = re.sub(r"\[[^\]]+\]\([^\)]+\)|https?://[^\s]+", "", cleaned)

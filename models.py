@@ -10,7 +10,7 @@ class Job(BaseModel):
     is_remote_friendly: bool | None = None
     employment_type: str | None = None
     compensation: str | None = None
-    job_posting_url: str
+    job_posting_url: str | None = None
     job_summary: str
 
     key_qualifications: List[str] | None = None
