@@ -6,7 +6,7 @@
 
 https://www.firecrawl.dev/app/playground?mode=search 에서 무료 api key 발급 받아 넣는다. <br><br>
 
-### **[Firecrawl이란?]**
+### <b>[Firecrawl이란?] </b>
 
 **Firecrawl**은 AI 에이전트 개발에 최적화된 웹 스크래핑 및 검색 도구이다.
 
@@ -23,7 +23,7 @@ https://www.firecrawl.dev/app/playground?mode=search 에서 무료 api key 발�
 ### <b>[결과]</b>
 output 파일
 
-### [CrewAI News Reader Agent 와의 차이] ###
+### <b>[CrewAI News Reader Agent 와의 차이]</b> ###
 이전 프로젝트(News Reader Agent)에서는 작업(Task)이 순차적(선형적)으로 진행되며, 앞 단계의 결과가 바로 뒷 단계로만 전달되었다. 
 하지만 이번 Job Hunter Agent에서는 특정 Task가 바로 앞 단계뿐만 아니라, 이전의 여러 Task 결과값을 동시에 필요로 한다. 이때 **context** 파라미터를 사용.
 
@@ -39,13 +39,14 @@ output 파일
         )
 이런식으로 context = [] 로 받고 싶은 task를 선언 (CrewAI는 기본적으로 직전 Task의 결과를 전달하므로, 바로 앞 단계의 결과만 필요하다면 context를 명시할 필요가 없.)
 
-### <b>models.py ###
+### <b>[models.py] ###
 pydantic 패키지를 사용해 데이터의 형태를 지정해준다. 
 https://docs.pydantic.dev/latest/#pydantic-examples
 
-### <b>참고</b>
+### <b>[참고]</b>
 tools.py에서 사용할 Tool을 정의할때 firecrawl를 활용했는데 버전 업데이트로 강의 코드와 달라졌다. 
 혹시 다음에도 버전이슈로 반환되는 데이터 객체의 구조가 달라질 수도있음. 
+
 
 
 
