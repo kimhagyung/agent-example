@@ -25,7 +25,7 @@ output 파일
 
 ### [CrewAI News Reader Agent 와의 차이] ###
 이전 프로젝트(News Reader Agent)에서는 작업(Task)이 순차적(선형적)으로 진행되며, 앞 단계의 결과가 바로 뒷 단계로만 전달되었다. 
-하지만 이번 Job Hunter Agent에서는 특정 Task가 바로 앞 단계뿐만 아니라, 이전의 여러 Task 결과값을 동시에 필요로 합니다. 이때 context 파라미터를 사용.
+하지만 이번 Job Hunter Agent에서는 특정 Task가 바로 앞 단계뿐만 아니라, 이전의 여러 Task 결과값을 동시에 필요로 한다. 이때 context 파라미터를 사용.
 
     @task
     def interview_prep_task(self):
@@ -46,5 +46,6 @@ https://docs.pydantic.dev/latest/#pydantic-examples
 ### <b>참고</b>
 Tool을 만들 때 firecrawl를 활용했는데 버전 업데이트로 강의 코드와 달라졌다. 
 혹시 다음에도 버전이슈로 반환되는 데이터 객체의 구조가 달라질 수도있음. 
+
 
 
