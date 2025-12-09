@@ -44,8 +44,9 @@ pydantic 패키지를 사용해 데이터의 형태를 지정해준다.
 https://docs.pydantic.dev/latest/#pydantic-examples
 
 ### <b>참고</b>
-Tool을 만들 때 firecrawl를 활용했는데 버전 업데이트로 강의 코드와 달라졌다. 
+tools.py에서 사용할 Tool을 정의할때 firecrawl를 활용했는데 버전 업데이트로 강의 코드와 달라졌다. 
 혹시 다음에도 버전이슈로 반환되는 데이터 객체의 구조가 달라질 수도있음. 
+
 
 
 
