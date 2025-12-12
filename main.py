@@ -11,10 +11,12 @@ class MyFirstFlow(Flow):
 
     @start()
     def first(self):
+        self.state["whatever"] = 1 # state 생성
         print('Hello')
 
     @listen(first) # first라는 function의 종료를 listen한다. 
     def second(self):
+        print(self.state["whatever"])  #state 출력 
         print('world')
 
     @listen(first)
@@ -24,8 +26,26 @@ class MyFirstFlow(Flow):
     #condition(조건)으로 listen도 가능 
     @listen(and_(second, third)) # second와 third가 끝나길 기다림 
     def final(self):
+        self.state["whatever"] =  2 # state 수정정
         print(":)")
+
+    @router(final)
+    def route(self):
+        a=2
+        if a == 2:
+            return 'even'
+        else:
+            return 'odd'
+
+    @listen("even") # 이번에는 함수가 아닌 route함수의 이벤트를 listen함 
+    def hadle_even(self):
+        print("even")
+
+    @listen("odd")
+    def handle_odd(self):
+        print("odd")
 
 flow = MyFirstFlow()
 
-flow.plot() # 도식화 
+flow.plot()
+flow.kickoff()
