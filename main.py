@@ -16,6 +16,12 @@ class ContentPipelineState(BaseModel):
 
     # Internal
     max_length : int = 0
+    score : int = 0 
+
+    # Content
+    blog_post: str = ""
+    tweet: str=""
+    linkedin_post : str=""
 
 class ContentPipelineFlow(Flow[ContentPipelineState]):
 
@@ -40,7 +46,7 @@ class ContentPipelineFlow(Flow[ContentPipelineState]):
         return True
 
     @router(conduct_research)
-    def router(self):
+    def conduct_research_router(self):
         content_type = self.state.content_type
 
         if content_type == "blog":
@@ -50,16 +56,22 @@ class ContentPipelineFlow(Flow[ContentPipelineState]):
         else:
             return "make_linkedin_post"
 
-    @listen("make_blog")   #각 변수에 대한 리스너 
+    @listen(or_("make_blog", "remake_blog"))   #각 변수에 대한 리스너 
     def handle_make_blog(self):
+        # if blog post가 이번에 만들어진적이 있는지 확인하고 그렇다면 예전 것을 ai에게 보여줘야 한다 .그리고 그것을 개선해달라고 요청
+        # else 이전에 생성된 ㅓㅈㄱ이 없다면 그냥 생성해달라고 요청
         print("Making blog post...")
 
-    @listen("make_tweet")    
+    @listen(or_("make_tweet","remake_tweet"))    
     def handle_make_tweet(self):
+        # if blog tweet가 이번에 만들어진적이 있는지 확인하고 그렇다면 예전 것을 ai에게 보여줘야 한다 .그리고 그것을 개선해달라고 요청
+        # else 이전에 생성된 ㅓㅈㄱ이 없다면 그냥 생성해달라고 요청
         print("Making tweet...")
 
-    @listen("make_linkedin_post")    
+    @listen(or_("make_linkedin_post","remake_linkedin_post"))    
     def handle_make_linkedin_post(self):
+        # if linkedin_post가 이번에 만들어진적이 있는지 확인하고 그렇다면 예전 것을 ai에게 보여줘야 한다 .그리고 그것을 개선해달라고 요청
+        # else 이전에 생성된 ㅓㅈㄱ이 없다면 그냥 생성해달라고 요청
         print("Making linkedin post...")
 
     @listen("handle_make_blog")    
@@ -70,7 +82,23 @@ class ContentPipelineFlow(Flow[ContentPipelineState]):
     def check_virality(self):
         print("Checking virality...")
 
-    @listen(or_(check_virality, check_seo))
+    @router(or_(check_seo, check_virality))
+    def score_router(self):
+        content_type = self.state.content_type
+        score = self.state.score
+
+        if score >= 8:
+            return "check_passed"
+        else:
+            if content_type == "blog":
+                return "remake_blog"
+            elif content_type == "linkedin":
+                return "remake_linkedin_post"
+            else:
+                return "remake_tweet"
+                
+
+    @listen("check_passed")
     def finalize_content(self):
         print("Finalizing content")
 
