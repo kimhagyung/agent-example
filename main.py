@@ -5,6 +5,7 @@ from crewai import LLM
 from pydantic import BaseModel
 from urllib3 import response
 from tools import web_search_tool
+from seo_crew import SeoCrew
 
 # flow는 그저 class이다. 
 # flow는 여러개의 method를 가진 class임 
@@ -44,15 +45,14 @@ class ContentPipelineState(BaseModel):
     topic: str=""
 
     # Internal
-    max_length : int = 0
-    score : int = 0 
+    max_length : int = 0 
     research : str=""
     score: Score | None = None
 
     # Content
     blog_post: BlogPost | None = None # 기본값도 None
-    tweet: str=""
-    linkedin_post : str=""
+    tweet: Tweet | None = None
+    linkedin_post: LinkedInPost | None = None
 
 class ContentPipelineFlow(Flow[ContentPipelineState]):
 
@@ -102,9 +102,9 @@ class ContentPipelineFlow(Flow[ContentPipelineState]):
        
         if blog_post is None:
             # [수정됨] 블로그 생성 프롬프트 (한국어)
-            self.state.blog_post = llm.call(
+            result = llm.call(
                 f"""
-                주제 '{self.state.topic}'에 대한 블로그 포스트를 작성해 주세요.
+                주제 '{self.state.topic}'에 대한 좋은 SEO를 가지는 블로그 포스트를 작성해 주세요.
                 반드시 아래의 조사 자료를 바탕으로 작성해야 하며, 언어는 **한국어**입니다.
 
                 <research>
@@ -116,7 +116,7 @@ class ContentPipelineFlow(Flow[ContentPipelineState]):
             )
         else:
             # [수정됨] 블로그 수정(Refine) 프롬프트 (한국어)
-            self.state.blog_post = llm.call(
+            result = llm.call(
                 f"""
                 당신이 '{self.state.topic}'에 대해 작성한 블로그 글이 SEO 점수가 낮습니다.
                 
@@ -137,35 +137,126 @@ class ContentPipelineFlow(Flow[ContentPipelineState]):
                 """
             )
 
+        self.state.blog_post = result
+
     @listen(or_("make_tweet","remake_tweet"))    
     def handle_make_tweet(self):
-        # if blog tweet가 이번에 만들어진적이 있는지 확인하고 그렇다면 예전 것을 ai에게 보여줘야 한다 .그리고 그것을 개선해달라고 요청
-        # else 이전에 생성된 ㅓㅈㄱ이 없다면 그냥 생성해달라고 요청
-        print("Making tweet...")
+
+        tweet = self.state.tweet
+
+        llm = LLM(model="openai/o4-mini", response_format=Tweet)
+
+       
+        if tweet is None:
+            # [수정됨] 블로그 생성 프롬프트 (한국어)
+            result = llm.call(
+                f"""
+                주제 '{self.state.topic}'로 바이럴 될 만한 tweet을 작성해 주세요.
+                반드시 아래의 조사 자료를 바탕으로 작성해야 하며, 언어는 **한국어**입니다.
+
+                <research>
+                ================
+                {self.state.research}
+                ================
+                </research>
+                """
+            )
+        else:
+            # [수정됨] 블로그 수정(Refine) 프롬프트 (한국어)
+            result = llm.call(
+                f"""
+                당신이 '{self.state.topic}'에 대해 작성한 tweet이 SEO 점수가 낮습니다.
+                
+                이유: {self.state.score.reason}
+                
+                위 내용을 반영하여 글을 개선해 주세요.
+                아래의 조사 자료를 다시 참고하고, 반드시 **한국어**로 작성하세요.
+
+                <tweet>
+                {self.state.tweet.model_dump_json()}
+                </tweet>
+
+                <research>
+                ================
+                {self.state.research}
+                ================
+                </research>
+                """
+            )
+        self.state.tweet = result
+
 
     @listen(or_("make_linkedin_post","remake_linkedin_post"))    
     def handle_make_linkedin_post(self):
-        # if linkedin_post가 이번에 만들어진적이 있는지 확인하고 그렇다면 예전 것을 ai에게 보여줘야 한다 .그리고 그것을 개선해달라고 요청
-        # else 이전에 생성된 ㅓㅈㄱ이 없다면 그냥 생성해달라고 요청
-        print("Making linkedin post...")
+        
+        linkedin_post = self.state.tweet
+
+        llm = LLM(model="openai/o4-mini", response_format=LinkedInPost)
+
+       
+        if linkedin_post is None:
+            # [수정됨] 블로그 생성 프롬프트 (한국어)
+            result = llm.call(
+                f"""
+                주제 '{self.state.topic}' 로 바이럴 될 만한 linkedin post를 작성해  주세요.
+                반드시 아래의 조사 자료를 바탕으로 작성해야 하며, 언어는 **한국어**입니다.
+
+                <research>
+                ================
+                {self.state.research}
+                ================
+                </research>
+                """
+            )
+        else:
+            # [수정됨] 블로그 수정(Refine) 프롬프트 (한국어)
+            result = llm.call(
+                f"""
+                당신이 '{self.state.topic}'에 대해 작성한 linkedin post이 SEO 점수가 낮습니다.
+                
+                이유: {self.state.score.reason}
+                
+                위 내용을 반영하여 글을 개선해 주세요.
+                아래의 조사 자료를 다시 참고하고, 반드시 **한국어**로 작성하세요.
+
+                <linkedin_post>
+                {self.state.linkedin_post.model_dump_json()}
+                </linkedin_post>
+
+                <research>
+                ================
+                {self.state.research}
+                ================
+                </research>
+                """
+            )
+        self.state.linkedin_post =result
+
 
     @listen("handle_make_blog")    
     def check_seo(self):
-        print(self.state.blog_post)
-        print("==================")
-        print(self.state.research)
-        print("Checking log SEO..")
+
+        result = SeoCrew().crew().kickoff(  # SEO 팀, 지금 작성된 글 좀 평가해 줘! 라는 부분 
+            {
+                "topic":self.state.topic,
+                "blog_post": self.state.blog_post.model_dump_json()   # 작성된 글을 전달
+            }
+        )
+        self.state.score = result.pydantic # crew의 결과값의 pydantic에 접근하면 출력값에 접근가능 
     
     @listen(or_(handle_make_tweet, handle_make_linkedin_post))
     def check_virality(self):
+        print(self.state.tweet)
+        print(self.state.linkedin_post)
         print("Checking virality...")
 
     @router(or_(check_seo, check_virality))
     def score_router(self):
         content_type = self.state.content_type
         score = self.state.score
-
-        if score >= 8:
+        print("score :",score)
+        
+        if score.score >= 8:
             return "check_passed"
         else:
             if content_type == "blog":
