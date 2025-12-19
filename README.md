@@ -6,6 +6,7 @@
 ### **[목표]** <br>
 작성된 초안을 분석하여 검색 결과 상위 노출(SEO)과 콘텐츠 확산을 극대화 하도록 최적화 한다. 
 최종덕으로 성과 분석 리포트와 함께 바로 게시 가능한 완성본 전달
+
 <img width="496" height="655" alt="image" src="https://github.com/user-attachments/assets/e34c8b07-a406-4e5a-8cbc-66b7ce2a2e2e" />
 
 ### **[CrewAI의 Flow]** <br>
@@ -95,5 +96,6 @@ pip install crewai uv
 
 ### **[참고_2]** <br>
 결과물을 한글로 보고 싶어 한글로 변경하려 햇지만 다는 못함.. 
+
 
 
