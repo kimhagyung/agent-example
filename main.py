@@ -6,6 +6,7 @@ from pydantic import BaseModel
 from urllib3 import response
 from tools import web_search_tool
 from seo_crew import SeoCrew
+from virality_crew import ViralityCrew
 
 # flow는 그저 class이다. 
 # flow는 여러개의 method를 가진 class임 
@@ -246,9 +247,16 @@ class ContentPipelineFlow(Flow[ContentPipelineState]):
     
     @listen(or_(handle_make_tweet, handle_make_linkedin_post))
     def check_virality(self):
-        print(self.state.tweet)
-        print(self.state.linkedin_post)
-        print("Checking virality...")
+        result = ViralityCrew().crew().kickoff(  
+            {
+                "topic":self.state.topic,
+                "content_type" : self.state.content_type,
+                "content": self.state.tweet.model_dump_json()
+                if self.state.content_type == "tweet"
+                else self.state.linkedin_post.model_dump_json() 
+            }
+        )
+        self.state.score = result.pydantic  
 
     @router(or_(check_seo, check_virality))
     def score_router(self):
