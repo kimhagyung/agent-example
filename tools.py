@@ -1,101 +1,84 @@
-import os
-import re
-import time
-from crewai.tools import tool
+import os, re
+import datetime
 from firecrawl import FirecrawlApp
 
-@tool
+# content(report)를 받아서 리포트용 정보를 수집하는 도구
 def web_search_tool(query: str):
     """
-    Web Search Tool.
+    웹 검색 도구 (Web Search Tool)
     Args:
         query: str
-            The query to search the web for.
-    Returns
-        A list of search results with the website content in Markdown format.
+            검색할 검색어 (한국어로 입력하면 더 정확합니다)
+    Returns:
+        Markdown 형식의 웹사이트 콘텐츠가 포함된 검색 결과 리스트
     """
     app = FirecrawlApp(api_key=os.getenv("FIRECRAWL_API_KEY"))
 
-    max_retries = 2
-    response = None
+    # 한국어 결과를 얻기 위해 lang="ko" 옵션을 추가했습니다.
+    response = app.search(
+        query=query,
+        limit=2,
+        lang="ko", 
+        scrape_options={
+            "formats": ["markdown"]
+        }
+    )
 
-    # 1. 재시도 로직을 포함한 검색 실행
-    for attempt in range(max_retries):
-        try:
-            print(f"\n🔎 검색 시도 중... ({attempt + 1}/{max_retries})")
-            
-            response = app.search(
-                query=query,
-                limit=5,
-                scrape_options={"formats": ["markdown"]}
-            )
-            
-            # 응답이 비어있지 않으면 성공으로 간주
-            if response:
-                break
-
-        except Exception as e:
-            error_msg = str(e)
-            # Rate Limit 에러 시 대기
-            if "Rate limit" in error_msg or "429" in error_msg:
-                print(f"\n⏳ [Rate Limit] API 한도 초과. 65초 대기 후 재시도합니다...")
-                time.sleep(65)
-                continue
-            else:
-                return f"Error using tool: {error_msg}"
-
-    if not response:
-        return "Error: Search failed or returned no data."
-
-    # 2. 데이터 추출 (여기가 핵심 수정 사항!)
-    raw_data = []
-    
-    # 최신 firecrawl 버전은 .web 속성에 리스트를 담고 있음
-    if hasattr(response, 'web'):
-        raw_data = response.web
-    # 혹시 구버전일 경우 .data 확인
-    elif hasattr(response, 'data'):
-        raw_data = response.data
-    # 딕셔너리 형태로 반환된 경우
-    elif isinstance(response, dict):
-        raw_data = response.get('web') or response.get('data') or []
-    
-    if not raw_data:
-        return "Error: No search results found in response."
+    if not response.success:
+        return "도구 사용 중 오류가 발생했습니다."
 
     cleaned_chunks = []
 
-    # 3. 데이터 정제
-    for result in raw_data:
-        # 객체(Object)인지 딕셔너리(Dict)인지 확인하여 안전하게 값 추출
-        title = ""
-        url = ""
-        content = ""
+    for result in response.data:
+        title = result.get("title", "")
+        url = result.get("url", "")
+        markdown = result.get("markdown", "")
 
-        if isinstance(result, dict):
-            title = result.get("title", "")
-            url = result.get("url", "")
-            # markdown이 없으면 description이라도 가져옴
-            content = result.get("markdown", "") or result.get("description", "")
-        else:
-            # 객체 속성으로 접근 (getattr 사용)
-            title = getattr(result, "title", "")
-            url = getattr(result, "url", "")
-            content = getattr(result, "markdown", "") or getattr(result, "description", "")
-
-        if not content:
-            continue
- 
-        # 불필요한 문자 제거
-        cleaned = re.sub(r"\\+|\n+", " ", content).strip()
+        # 정규표현식으로 불필요한 기호 및 공백 제거
+        cleaned = re.sub(r"\\+|\n+", " ", markdown).strip()
         cleaned = re.sub(r"\[[^\]]+\]\([^\)]+\)|https?://[^\s]+", "", cleaned)
 
         cleaned_result = {
             "title": title,
             "url": url,
-            "markdown": cleaned[:4000], # 너무 길면 잘라서 에이전트에게 전달
+            "markdown": cleaned,
         }
 
         cleaned_chunks.append(cleaned_result)
 
     return cleaned_chunks
+
+
+# 수집된 content를 report.md 파일에 써주는 도구
+def save_report_to_md(content: str) -> str:
+    """리포트 내용을 report.md 파일로 저장합니다."""
+    # [중요] 한글 깨짐 방지를 위해 encoding="utf-8"을 반드시 추가해야 합니다.
+    with open("report.md", "w", encoding="utf-8") as f:
+        f.write(content)
+    return "report.md 파일에 성공적으로 저장되었습니다."
+
+if __name__ == "__main__":
+    print("\n>>> [테스트 시작] 환경 변수 로드 확인 중...")
+    
+    test_key = os.getenv("FIRECRAWL_API_KEY")
+    if test_key:
+        print(f"✅ API 키 확인됨: {test_key[:5]}******")
+    else:
+        print("❌ API 키가 없습니다. .env 파일을 확인해주세요.")
+        exit()
+
+    print("\n>>> 1. 검색 도구 테스트 (검색어: '삼성전자 주가')")
+    result = web_search_tool("삼성전자 주가")
+    
+    # 결과 출력 (너무 길면 잘라서 출력)
+    if isinstance(result, list) and result:
+        print(f"--- 검색 결과 타이틀: {result[0]['title']} ---")
+        print(f"--- 내용 미리보기: {result[0]['markdown'][:200]} ...")
+    else:
+        print(f"--- 검색 결과: {result}")
+
+    print("\n>>> 2. 파일 저장 테스트")
+    save_res = save_report_to_md("# 테스트 성공\n\n이 파일은 tools.py 테스트 결과입니다.")
+    print(f"--- 저장 결과: {save_res} ---")
+    print("\n>>> [테스트 종료]")
+    
