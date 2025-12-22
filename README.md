@@ -10,7 +10,7 @@
 email-optimizer-team.ipynb > 파일자체  <br>
 deep-research-team.ipynb > report.md
 
-#### **Autogen 특징**
+### **Autogen 특징**
 https://microsoft.github.io/autogen/stable/
 * Microsoft에서 개발한 멀티 에이전트 프레임워크
 * 출시된 지 오래되어 최신 트렌드 대비 다소 구식한 인상
@@ -39,5 +39,6 @@ https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutor
 ### **[참고]** <br>
 결과가 한글로 나왔으면 하는 마음에 강의영상을 보며 한글로 번역하여 작성했지만 모델 성능이슈인지 잘 되지는 않았다.
 결과적으로 Autogen을 실제 프로젝트에 사용할 가능성이 낮다고 판단하여, 추가 개선은 진행하지 않았다 (API 비용 이슈 포함).
+
 
 
