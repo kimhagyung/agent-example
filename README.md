@@ -6,6 +6,10 @@
 ### **[목표]** <br>
 여러 에이전트를 하나의 그룹 채팅에 넣어 서로 협업·토론하며(사람 개입 포함) 작업을 완료하는 멀티에이전트 대화형 애플리케이션을 만든다. 
 
+### <b>[결과]</b>
+email-optimizer-team.ipynb > 파일자체  <br>
+deep-research-team.ipynb > report.md
+
 #### **Autogen 특징**
 https://microsoft.github.io/autogen/stable/
 * Microsoft에서 개발한 멀티 에이전트 프레임워크
@@ -16,6 +20,7 @@ https://microsoft.github.io/autogen/stable/
 ### **[Autogen Teams]** <br>
 https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/teams.html
 <img width="679" height="302" alt="image" src="https://github.com/user-attachments/assets/71766827-ec2b-4e88-b784-8787a326b490" />
+
 [4개의 Team이 존재하며 해당 코드는 RoundRobinGroupChat, SelectorGroupChat 만 다룬다.]
  
 #### **[Team - RoundRobinGroupChat ]** <br>
@@ -34,4 +39,5 @@ https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutor
 ### **[참고]** <br>
 결과가 한글로 나왔으면 하는 마음에 강의영상을 보며 한글로 번역하여 작성했지만 모델 성능이슈인지 잘 되지는 않았다.
 결과적으로 Autogen을 실제 프로젝트에 사용할 가능성이 낮다고 판단하여, 추가 개선은 진행하지 않았다 (API 비용 이슈 포함).
+
 
