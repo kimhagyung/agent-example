@@ -41,11 +41,12 @@
 **결론:**
 이런 기본적인 요소(블록)들만 던져주고, **누가 누구한테 말을 걸고, 언제 도구를 쓸지는 네가 파이썬 코드로 직접 짜**는 것이다.
 그래서 코드가 매우 직관적이고 디버깅하기 좋다. 
-**[공식문서]**
+
+#### **[공식문서]**
 
 <img width="1019" height="470" alt="image" src="https://github.com/user-attachments/assets/1338eb9d-0e22-4b90-96a1-cf57db738c8c" />
 
-**[한글번역]**
+#### **[한글번역]**
 
 <img width="1008" height="437" alt="image" src="https://github.com/user-attachments/assets/2633a893-1f43-4428-be8b-c260142fc5e1" />
 
@@ -69,6 +70,7 @@
 
 
 ... 다음은 streamlit에 대해서 이어서 ..
+
 
 
 
