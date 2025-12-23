@@ -41,20 +41,13 @@
 **결론:**
 이런 기본적인 요소(블록)들만 던져주고, **누가 누구한테 말을 걸고, 언제 도구를 쓸지는 네가 파이썬 코드로 직접 짜**는 것이다.
 그래서 코드가 매우 직관적이고 디버깅하기 좋다. 
+**[공식문서]**
 
 <img width="1019" height="470" alt="image" src="https://github.com/user-attachments/assets/1338eb9d-0e22-4b90-96a1-cf57db738c8c" />
 
-**[공식문서]**
-
-<img width="1008" height="437" alt="image" src="https://github.com/user-attachments/assets/2633a893-1f43-4428-be8b-c260142fc5e1" />
-
 **[한글번역]**
 
-네, 보내주신 내용을 바탕으로 **Tracing(추적)** 기능에 대한 부분도 앞선 톤앤매너에 맞춰 깔끔하게 정리해 드립니다.
-
-'기도 메타(그저 잘 되길 바라는 것)'라는 표현이 확 와닿네요. 그 부분을 살려서 정리했습니다.
-
----
+<img width="1008" height="437" alt="image" src="https://github.com/user-attachments/assets/2633a893-1f43-4428-be8b-c260142fc5e1" />
 
 ### **이미지에 있는 Tracing(추적) 기능이란?**
 
@@ -76,6 +69,7 @@
 
 
 ... 다음은 streamlit에 대해서 이어서 ..
+
 
 
 
