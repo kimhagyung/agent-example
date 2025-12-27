@@ -18,16 +18,30 @@ if "session" not in st.session_state:
     st.session_state["session"] = SQLiteSession("chat-history", "chat-gpt-clone-memory.db")
 session = st.session_state["session"]
 
+# 챗팅 UI에 대화 기록을 보여주는 함수 
+async def paint_history():
+    messages = await session.get_items()
+
+    for message in messages:
+        with st.chat_message(message["role"]):
+            if message["role"] == "user":
+                st.write(message["content"])
+            else: # assistant 
+                if message["type"] == "message":
+                    st.write(message["content"][0]["text"])
+asyncio.run(paint_history())  # 이 함수로 인해 대화ui가 계속 이어짐. 없으면 기존 대화가 덮힘 (뭔말인지 모르겠으면 없애봐도됨)
+
 async def run_agent(message):
-    stream = Runner.run_streamed(agent, message,session = session)
+    with st.chat_message("ai"):
+        text_placeholder = st.empty() #비어있는 컨테이너 만들기 
+        response = ""
+        stream = Runner.run_streamed(agent, message,session = session)
 
-    async for event in stream.stream_events():
-        if event.type == "raw_response_event":
-            if event.data.type == "response.output_text.delta":
-                with st.chat_message("ai"):
-                    st.write(event.data.delta)
-
-
+        async for event in stream.stream_events():
+            if event.type == "raw_response_event":
+                if event.data.type == "response.output_text.delta":
+                    response += event.data.delta
+                    text_placeholder.write(response)
 
 prompt = st.chat_input("Write a message for your assistant")
 
@@ -35,7 +49,7 @@ if prompt:
     with st.chat_message("user"):
         st.write(prompt) #메시지를 치면 user아이콘으로 화면에 보이게 함 
     asyncio.run(run_agent(prompt))
-    
+
 # 내 챗봇의 메모리를 볼 수 있는 디버깅 사이드바 만들기 , 또한 대화를 다시 시작하고 싶을 때를 위해 session을 지우는 버튼도 만든다. \
 with st.sidebar:
     reset = st.button("Reset memory")
