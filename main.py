@@ -58,7 +58,7 @@ def update_status(status_container, event):
 asyncio.run(paint_history())  # 이 함수로 인해 대화ui가 계속 이어짐. 없으면 기존 대화가 덮힘 (뭔말인지 모르겠으면 없애봐도됨)
 
 async def run_agent(message):
-    with st.chat_message("ai"):
+    with st.chat_message("ai"): n
         text_placeholder = st.empty() #비어있는 컨테이너 만들기 
         response = "" 
 
