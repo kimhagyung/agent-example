@@ -73,7 +73,7 @@ Streamlit을 사용하여 파이썬 UI를 생성하고, **OpenAI Agents SDK**를
 #### **[정의]**
 
 * Agents SDK로 만든 에이전트가 수행하는 **모든 일거수일투족**을 의미한다.
-* 단순 텍스트 로그뿐만 아니라, OpenAI 대시보드(Dashboard)에서 시각화된 데이터로 볼 수 있으며, **어떤 Tool을 호출했는지(Tool Call)**까지 전부 확인 가능하다.
+* 단순 텍스트 로그뿐만 아니라, OpenAI 대시보드(Dashboard)에서 시각화된 데이터로 볼 수 있으며, <b>어떤 Tool을 호출했는지(Tool Call)</b>까지 전부 확인 가능하다.
 
 #### **[기존 프레임워크 (CrewAI, AutoGen 등)의 문제점]**
 
@@ -119,4 +119,5 @@ await session.clear_session()
 streamlit run main.py
 
 ```
+
 
