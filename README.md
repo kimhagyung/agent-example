@@ -60,7 +60,7 @@ Streamlit을 사용하여 파이썬 UI를 생성하고, **OpenAI Agents SDK**를
 
 #### **[공식문서]**
 
-<img width="1019" height="470" alt="image" src="[https://github.com/user-attachments/assets/1338eb9d-0e22-4b90-96a1-cf57db738c8c](https://github.com/user-attachments/assets/1338eb9d-0e22-4b90-96a1-cf57db738c8c)" />
+<img width="1019" height="470" alt="image" src="https://github.com/user-attachments/assets/1338eb9d-0e22-4b90-96a1-cf57db738c8c" />
 
 #### **[한글번역]**
 
@@ -119,3 +119,4 @@ await session.clear_session()
 streamlit run main.py
 
 ```
+
