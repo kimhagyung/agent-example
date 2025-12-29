@@ -3,6 +3,12 @@
 ### **[.env 환경 파일 구성]** <br>
 이전과 동일 <br>
 
+### **[목표]** <br>
+streamlit을 사용한 파이썬 UI 생성하고 
+openAI Agents SDK 를 사용하여 여러개의 mcp서버, tool을 가진 ChatBot을 만든다.
+(ChatGPT-clone)
+
+
 ### **[OpenAI Agents SDK]**
 * **URL:** [https://openai.github.io/openai-agents-python/](https://openai.github.io/openai-agents-python/)
 * **특징:** 엄청 가볍고 배워야 할 개념들도 거의 없다.
@@ -51,6 +57,8 @@
 <img width="1008" height="437" alt="image" src="https://github.com/user-attachments/assets/2633a893-1f43-4428-be8b-c260142fc5e1" />
 
 ### **이미지에 있는 Tracing(추적) 기능이란?**
+https://platform.openai.com/logs?api=chat-traces 
+에서 확인 가능 
 
 #### **[정의]**
 * Agents SDK로 만든 에이전트가 수행하는 **모든 일거수일투족**을 의미한다.
@@ -67,9 +75,21 @@
 * **기본 활성화 (Built-in):** 복잡한 설정 없이 Tracing 기능이 **기본적으로 켜져 있다(Default On)**.
 * **강력한 시각화:** 에이전트를 호출할 때마다 **OpenAI 대시보드**에 자동으로 로그가 남는다.
 * **투명성:** "아, 여기서 이 툴을 썼구나", "여기서 시간이 오래 걸렸구나"를 눈으로 보고 확실하게 파악이 가능하다
+ 
+#### **[dummy-agent.ipynb]** 
 
+최종 결과물에는 포함 되지 않고 일단 챗의 기능만 구현한 코드이다. 
 
-... 다음은 streamlit에 대해서 이어서 ..
+#### **[Session Memory]** 
+
+SQLiteSession을 import 하여 사용하여 세션을 db에 저장하여 메모리를 유지할 수있다(후에 runner에 추가) 
+예) session = SQLiteSession("user_1", "ai-memory.db") # SQLiteSession(식별자 , db_id)
+세션 초기화 : await session.clear_session() 
+
+참고로 SQLiteSession이 아닌 다른 db나 서버, 회사api를 사용하고 싶다면 아래 문서 참고 
+https://openai.github.io/openai-agents-python/sessions/#custom-memory-implementations
+ 
+
 
 
 
