@@ -4,7 +4,7 @@ from openai import OpenAI
 import asyncio # await과 같은 의미 
 import streamlit as st 
 import base64
-from agents import Agent, Runner, SQLiteSession, WebSearchTool, FileSearchTool, ImageGenerationTool
+from agents import Agent, Runner, SQLiteSession, WebSearchTool, FileSearchTool, ImageGenerationTool, CodeInterpreterTool
 
 client = OpenAI()
 
@@ -13,13 +13,15 @@ VECTOR_STORE_ID = "vs_69524a97853c8191ab06435316ddc95b"
 if "agent" not in st.session_state: # agent 재생성 방지
     st.session_state["agent"] = Agent(
         name = "ChatGPT Clone",
-        # model="gpt-4o",
+        # model="gpt-4o", 
         instructions="""
              You are a helpful assistant.
 
             You have access to the followign tools:
             - Web Search Tool: Use this when the user asks a questions that isn't in your training data. Use this tool when the users asks about current or future events, when you think you don't know the answer, try searching for it in the web first.
             - File Search Tool: Use this tool when the user asks a question about facts related to themselves. Or when they ask questions about specific files.
+            - Code Interpreter Tool: Use this tool when you need to write and run code to answer the user's question.
+       
         """, 
         tools =[
             WebSearchTool(),
@@ -27,13 +29,21 @@ if "agent" not in st.session_state: # agent 재생성 방지
                 vector_store_ids = [VECTOR_STORE_ID], # 각 유저마다 있으면 좋을듯하다함 
                 max_num_results=3, # 상위 파일 3개만 가져오는 
             ),
-            ImageGenerationTool(
-                tool_config = {
-                    "type": "image_generation",      # 이미지 생성 타입 (맞음)
-                    "quality": "high",               # low가 더 저렴함. 이미지 품질 옵션 (보통 high/low 같은 단계) 
-                    "output_format": "jpeg",         
-                    "partial_images": 1,             # 중간 결과 이미지 개수 또는 단계 수를 의미하 
-                })
+            # ImageGenerationTool(
+            #     tool_config = {
+            #         "type": "image_generation",      # 이미지 생성 타입 (맞음)
+            #         "quality": "high",               # low가 더 저렴함. 이미지 품질 옵션 (보통 high/low 같은 단계) 
+            #         "output_format": "jpeg",         
+            #         "partial_images": 1,             # 중간 결과 이미지 개수 또는 단계 수를 의미하 
+            #     }),
+            CodeInterpreterTool(
+                    tool_config={
+                        "type": "code_interpreter", 
+                        "container": {
+                            "type": "auto",
+                        },
+                    }
+                ),
         ],
         
     )
@@ -75,6 +85,9 @@ async def paint_history():
                 image = base64.b64decode(message["result"])
                 with st.chat_message("ai"):
                     st.image(image)
+            elif message_type == "code_interpreter_call":
+                with st.chat_message("ai"):
+                    st.code(message["code"])
  
 
 # 상태 업데이트 
@@ -89,6 +102,10 @@ def update_status(status_container, event):
           "response.file_search_call.searching" : ("📁 File search in progress...","running"),
           "response.image_generation_call.generating" : ("🖼️ Drawing image ...","running"),
           "response.image_generation_call.in_progress" : ("🖼️ Drawing image ...","running"),  
+          'response.code_interpreter_call_code.done':("🤖 Ran Code.","complete") ,
+          'response.code_interpreter_call.completed':("🤖 Ran Code.","complete") ,
+          'response.code_interpreter_call.in_progress':("🤖 Running Code....","complete") ,
+          'response.code_interpreter_call.interpreting':("🤖 Running Code....","complete") ,
           "response.completed" : (" ","complete")
     }
 
@@ -99,12 +116,20 @@ def update_status(status_container, event):
 asyncio.run(paint_history())  # 이 함수로 인해 대화ui가 계속 이어짐. 없으면 기존 대화가 덮힘 (뭔말인지 모르겠으면 없애봐도됨)
 
 async def run_agent(message):
-    with st.chat_message("ai"): 
-        text_placeholder = st.empty() #비어있는 컨테이너 만들기 
-        response = "" 
-        image_placeholder = st.empty()
-
+    with st.chat_message("ai"):  
         status_container  = st.status("⌛", expanded=False) 
+        code_placeholder = st.empty() 
+        image_placeholder = st.empty()  # 이미지 컨테이너 비워주기 
+        text_placeholder = st.empty() #비어있는 컨테이너 만들기         
+        response = ""         
+        code_response = ""
+        
+        # 유저가 새로운 메시지를 보낼떄만 비워주도록 위함 
+        st.session_state["code_placeholder"] = code_placeholder
+        st.session_state["image_placeholder"] = image_placeholder
+        st.session_state["text_placeholder"] = text_placeholder
+        
+
         stream = Runner.run_streamed(agent, message,session = session)
 
         async for event in stream.stream_events():
@@ -115,9 +140,15 @@ async def run_agent(message):
                 if event.data.type == "response.output_text.delta":
                     response += event.data.delta
                     text_placeholder.write(response.replace("$","\$"))
+                
+                if event.data.type == "response.code_interpreter_call_code.delta":
+                    # code의 delte를 받으면 agent가 코드를 써내려감 .  
+                    code_response += event.data.delta
+                    code_placeholder.code(code_response)
+ 
                 elif event.data.type == "response.image_generation_call.partial_image":
                     image = base64.b64decode(event.data.image_url)
-                    image_placeholder.image(image)
+                    image_placeholder.image(image) 
 
 
 prompt = st.chat_input(
@@ -128,6 +159,14 @@ prompt = st.chat_input(
 
 if prompt: 
  
+    #새로운 프롬포트 입력받으면 비워주기 
+    if "code_placeholder" in st.session_state:
+        st.session_state["code_placeholder"].empty()
+    if "image_placeholder" in st.session_state:
+        st.session_state["image_placeholder"].empty()
+    if "text_placeholder" in st.session_state:
+        st.session_state["text_placeholder"].empty()
+
     for file in prompt.files:
         if file.type.startswith("text/"):
             with st.chat_message("ai"):
