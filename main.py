@@ -3,6 +3,7 @@ dotenv.load_dotenv()
 from openai import OpenAI
 import asyncio # await과 같은 의미 
 import streamlit as st 
+import base64
 from agents import Agent, Runner, SQLiteSession, WebSearchTool, FileSearchTool
 
 client = OpenAI()
@@ -43,7 +44,15 @@ async def paint_history():
         if "role" in message:
             with st.chat_message(message["role"]):
                 if message["role"] == "user":
-                    st.write(message["content"])
+                    content = message["content"]
+                    if isinstance(content,str):                            
+                        st.write(message["content"])
+                    elif isinstance(content,list):
+                        for part in content:
+                            if "image_url" in part:  # 이미지일떄 
+                                st.image(part["image_url"])
+                            
+
                 else: # assistant 
                     if message["type"] == "message":
                         st.write(message["content"][0]["text"].replace("$","\$"))
@@ -95,7 +104,7 @@ async def run_agent(message):
 prompt = st.chat_input(
     "Write a message for your assistant",
     accept_file=True,
-    file_type=["txt"],
+    file_type=["txt","jpg","jpeg","png","PNG"],
 )
 
 if prompt: 
@@ -114,13 +123,26 @@ if prompt:
                         file_id=uploaded_file.id,
                     )  # 벡터 스토어에 첨부 
                     status.update(label="✅ File uploaded", state="complete")
+        elif file.type.startswith("image/"):
+            with st.status("⏳ Uploading image...") as status:
+                file_bytes = file.getvalue()
+                base64_bytes = base64.b64encode(file_bytes).decode("utf-8")
+                data_url = f"data:{file.type};base64,{base64_bytes}"
+                asyncio.run(session.add_items([{
+                    "role":"user",
+                    "content":[{
+                        "type": "input_image",
+                        "image_url": data_url   
+                    }]
+                }]))
+                status.update(label="✅ Image uploaded", state="complete")
+            with st.chat_message("human"):
+                st.image(data_url)
+
     if prompt.text:
         with st.chat_message("human"):
             st.write(prompt.text)
         asyncio.run(run_agent(prompt.text))
-
-
-    
 
 # 내 챗봇의 메모리를 볼 수 있는 디버깅 사이드바 만들기 , 또한 대화를 다시 시작하고 싶을 때를 위해 session을 지우는 버튼도 만든다. \
 with st.sidebar:
