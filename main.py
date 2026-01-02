@@ -4,7 +4,7 @@ from openai import OpenAI
 import asyncio # await과 같은 의미 
 import streamlit as st 
 import base64
-from agents import Agent, Runner, SQLiteSession, WebSearchTool, FileSearchTool
+from agents import Agent, Runner, SQLiteSession, WebSearchTool, FileSearchTool, ImageGenerationTool
 
 client = OpenAI()
 
@@ -13,6 +13,7 @@ VECTOR_STORE_ID = "vs_69524a97853c8191ab06435316ddc95b"
 if "agent" not in st.session_state: # agent 재생성 방지
     st.session_state["agent"] = Agent(
         name = "ChatGPT Clone",
+        # model="gpt-4o",
         instructions="""
              You are a helpful assistant.
 
@@ -25,7 +26,14 @@ if "agent" not in st.session_state: # agent 재생성 방지
             FileSearchTool(
                 vector_store_ids = [VECTOR_STORE_ID], # 각 유저마다 있으면 좋을듯하다함 
                 max_num_results=3, # 상위 파일 3개만 가져오는 
-            )
+            ),
+            ImageGenerationTool(
+                tool_config = {
+                    "type": "image_generation",      # 이미지 생성 타입 (맞음)
+                    "quality": "high",               # low가 더 저렴함. 이미지 품질 옵션 (보통 high/low 같은 단계) 
+                    "output_format": "jpeg",         
+                    "partial_images": 1,             # 중간 결과 이미지 개수 또는 단계 수를 의미하 
+                })
         ],
         
     )
@@ -52,18 +60,22 @@ async def paint_history():
                             if "image_url" in part:  # 이미지일떄 
                                 st.image(part["image_url"])
                             
-
                 else: # assistant 
                     if message["type"] == "message":
                         st.write(message["content"][0]["text"].replace("$","\$"))
         if "type" in message:
-            if  message["type"] == "web_search_call":
+            message_type = message["type"]
+            if  message_type == "web_search_call":
                 with st.chat_message("ai"):
                     st.write("🔎Searched the Web...") 
-            elif  message["type"] == "file_search_call":
+            elif  message_type == "file_search_call":
                 with st.chat_message("ai"):
                     st.write("📁Searched your files...") 
-
+            elif  message_type == "image_generation_call":
+                image = base64.b64decode(message["result"])
+                with st.chat_message("ai"):
+                    st.image(image)
+ 
 
 # 상태 업데이트 
 def update_status(status_container, event):
@@ -75,6 +87,8 @@ def update_status(status_container, event):
           "response.file_search_call.completed" :("✅ File search completed.","complete"),
           "response.file_search_call.in_progres" : ("📁Starting file search...","running"),
           "response.file_search_call.searching" : ("📁 File search in progress...","running"),
+          "response.image_generation_call.generating" : ("🖼️ Drawing image ...","running"),
+          "response.image_generation_call.in_progress" : ("🖼️ Drawing image ...","running"),  
           "response.completed" : (" ","complete")
     }
 
@@ -88,6 +102,7 @@ async def run_agent(message):
     with st.chat_message("ai"): 
         text_placeholder = st.empty() #비어있는 컨테이너 만들기 
         response = "" 
+        image_placeholder = st.empty()
 
         status_container  = st.status("⌛", expanded=False) 
         stream = Runner.run_streamed(agent, message,session = session)
@@ -100,6 +115,10 @@ async def run_agent(message):
                 if event.data.type == "response.output_text.delta":
                     response += event.data.delta
                     text_placeholder.write(response.replace("$","\$"))
+                elif event.data.type == "response.image_generation_call.partial_image":
+                    image = base64.b64decode(event.data.image_url)
+                    image_placeholder.image(image)
+
 
 prompt = st.chat_input(
     "Write a message for your assistant",
