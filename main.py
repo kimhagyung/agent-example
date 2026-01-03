@@ -4,7 +4,16 @@ from openai import OpenAI
 import asyncio # await과 같은 의미 
 import streamlit as st 
 import base64
-from agents import Agent, Runner, SQLiteSession, WebSearchTool, FileSearchTool, ImageGenerationTool, CodeInterpreterTool
+from agents import (
+    Agent,
+    Runner, 
+    SQLiteSession, 
+    WebSearchTool, 
+    FileSearchTool, 
+    ImageGenerationTool,   # 인증문제로 잠시 주석 
+    CodeInterpreterTool, 
+    HostedMCPTool
+)
 
 client = OpenAI()
 
@@ -40,12 +49,22 @@ if "agent" not in st.session_state: # agent 재생성 방지
                     tool_config={
                         "type": "code_interpreter", 
                         "container": {
-                            "type": "auto",
+                            "type": "auto",  #항상auto임 
+                            # "file_ids" :  ["파일id"], # 이걸 하게 되면 모델에게 이전에 올렸던 파일에 대해 접근권한을 줄 수있다.(격리된 환경에서 파일을 제공할수있음)
                         },
                     }
                 ),
+            HostedMCPTool(
+                tool_config={
+                    "server_url": "https://mcp.context7.com/mcp",
+                    "type": "mcp",
+                    "server_label": "Context7",
+                    "server_description": "Use this to get the docs from software projects.",
+                    # 소프트웨어 프로젝트의 문서를 가져올 때 이것을 사용하시오 
+                    "require_approval": "never", # always 로 하면 mcp가 tool을 사용할떄마다 나한테 확인받음 never로 하면 자유롭게 사용가능
+                }
+            ), 
         ],
-        
     )
 agent = st.session_state["agent"]
 
@@ -88,6 +107,13 @@ async def paint_history():
             elif message_type == "code_interpreter_call":
                 with st.chat_message("ai"):
                     st.code(message["code"])
+            elif message_type == "mcp_list_tools":
+                with st.chat_message("ai"):
+                    st.write(f"Listed {message["server_label"]}'s tools")
+            elif message_type == "mcp_call":
+                with st.chat_message("ai"):
+                    st.write(f"Called {message["server_label"]}'s {message["name"]} with args {message["arguments"]}")
+
  
 
 # 상태 업데이트 
@@ -106,6 +132,11 @@ def update_status(status_container, event):
           'response.code_interpreter_call.completed':("🤖 Ran Code.","complete") ,
           'response.code_interpreter_call.in_progress':("🤖 Running Code....","complete") ,
           'response.code_interpreter_call.interpreting':("🤖 Running Code....","complete") ,
+          "response.mcp_call.failed": ("⚒️ Error calling MCP tool","complete",),
+          "response.mcp_call.in_progress": ("⚒️ Calling MCP tool...","running",),
+          "response.mcp_call.completed": ("⚒️ Listed MCP tools.","complete",),
+          "response.mcp_call.failed": ("⚒️ Error listing MCP tools","complete",),
+          "response.mcp_call.in_progress": ("⚒️ Listing MCP tools","complete",),
           "response.completed" : (" ","complete")
     }
 
@@ -127,8 +158,7 @@ async def run_agent(message):
         # 유저가 새로운 메시지를 보낼떄만 비워주도록 위함 
         st.session_state["code_placeholder"] = code_placeholder
         st.session_state["image_placeholder"] = image_placeholder
-        st.session_state["text_placeholder"] = text_placeholder
-        
+        st.session_state["text_placeholder"] = text_placeholder        
 
         stream = Runner.run_streamed(agent, message,session = session)
 
