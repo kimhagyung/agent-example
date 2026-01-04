@@ -114,11 +114,18 @@ async def run_agent(message):
         },
         cache_tools_list = True, # tool 목록을 한번만 가져오고 캐싱 됨 . 
     )
+
+    timezone_server = MCPServerStdio(
+        params={
+            "command": "uvx",
+            "args": ["mcp-server-time", "--local-timezone=America/New_York"],
+        }
+    )
     
     # 2. 서버를 with문으로 넣는다. 
-    async with yfinance_server:  
+    async with yfinance_server, timezone_server:  
         agent = Agent(
-            mcp_servers=[yfinance_server],
+            mcp_servers=[yfinance_server, timezone_server],
             name = "ChatGPT Clone",
             # model="gpt-4o", 
             instructions="""
