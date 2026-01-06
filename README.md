@@ -116,8 +116,35 @@ await session.clear_session()
 **[실행방법]**
 
 ```bash
-streamlit run main.py
+streamlit run main.py 
 
-```
+### **[Supported Tools & MCP Servers]**
 
+OpenAI Agents SDK에서 지원하는 주요 도구 목록입니다. (※ 일부 도구는 OpenAI API 사용료가 발생.)
 
+#### **1. Built-in Tools (기본 제공 도구)**
+
+| 도구명 | 설명 | 비고 |
+| --- | --- | --- |
+| **Web Search** | 최신 정보 검색을 위한 웹 서치 기능 | 실시간 데이터 접근 |
+| **File Search** | 파일 업로드 후 모델이 문서 내용을 검색 | [Vector Store](https://platform.openai.com/storage/vector_stores) 자동 생성 및 연동 |
+| **Code Interpreter** | 파이썬 코드를 실행하여 데이터 분석 및 계산 수행 | 복잡한 수식/차트 생성 시 유용 |
+| **Image Generation** | DALL-E를 활용한 이미지 생성 도구 | 프롬프트를 통한 이미지 출력 |
+| **Multi-modal Agent** | 이미지를 **Base64** 형식으로 변환하여 업로드 및 분석 | 이미지 인식 및 설명 가능 |
+
+#### **2. MCP (Model Context Protocol) 지원**
+
+에이전트의 능력을 외부 서버로 확장 
+
+* **Hosted MCP Tool:** * [Context7](https://context7.com/): 클라우드 기반 MCP 서버 연결 및 관리.
+* **Local MCP Server:** 로컬 환경에서 구동되는 외부 서비스 연동.
+* **Yahoo Finance:** [yfinance-mcp](https://github.com/narumiruna/yfinance-mcp)를 통한 주식/금융 데이터 조회.
+* **Timezone:** [Model Context Protocol Servers](https://github.com/modelcontextprotocol/servers)를 활용한 전 세계 시간 조회.
+
+ 
+
+### **[개발 환경 참고 사항]**
+
+* **Python 버전:** Windows 환경에서 3.13.x 버전 호환성 이슈가 있을 경우, **Python 3.11** 사용을 권장.
+* **비용 발생:** File Search(Vector Store 유지비) 및 Image Generation 등은 OpenAI API 정책에 따라 유료 과금이 발생 주의.
+  
