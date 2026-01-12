@@ -2,15 +2,12 @@
 
 ### **[.env 환경 파일 구성]**
 
-* 이전 프로젝트와 동일
-
----
+* 이전 프로젝트와 동일 
 
 ### **[목표]**
 
 * Google ADK의 **Workflow Agents**를 사용하여 유튜브 쇼츠 제작 에이전트 생성
-
----
+ 
 
 ### **[Workflow Agents] 란?**
 
@@ -46,9 +43,7 @@
 * Sub-agent 리스트를 받아서 여러 에이전트를 동시에(병렬로) 실행함
 
 <img width="593" height="290" alt="image" src="https://github.com/user-attachments/assets/6909c57a-4d75-4753-ae52-39ef258c6264" />
-
-
----
+ 
 
 ### **[실행 방법]**
 
@@ -58,12 +53,12 @@
 adk web
 
 ```
-
----
+ 
 
 ### **[사용 TOOL]**
 
 * **OpenAI TTS:** 텍스트를 음성으로 변환할 때 사용 ([문서](https://platform.openai.com/docs/guides/text-to-speech))
 * **FFmpeg:** 생성된 이미지와 오디오를 합쳐서 최종 쇼츠 비디오로 렌더링 ([공식 사이트](https://ffmpeg.org))
 * *참고: 로컬 시스템에 FFmpeg 설치가 반드시 되어 있어야 함*
+
 
