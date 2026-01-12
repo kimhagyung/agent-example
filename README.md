@@ -21,14 +21,14 @@
 
 #### **핵심 워크플로 에이전트 3가지 유형**
 
-**1. [Sequential Agent](https://google.github.io/adk-docs/agents/workflow-agents/sequential-agents/)** 
+**[1. Sequential Agent](https://google.github.io/adk-docs/agents/workflow-agents/sequential-agents/)** 
 
 * Sub-agents를 순차적으로 실행하게 해주는 기능
 * Sequential Agent를 import하고 여러 개의 Sub-agent를 리스트로 넣으면 알아서 순차적으로 실행됨 (정해진 순서대로 딱 한 번 실행되는 구조)
 
 <img width="686" alt="image" src="https://github.com/user-attachments/assets/ec14f726-5278-494a-9e50-a24d95b8aa8d" />
 
-**2.[Loop Agents](https://google.github.io/adk-docs/agents/workflow-agents/loop-agents/)**
+**[2. Loop Agents](https://google.github.io/adk-docs/agents/workflow-agents/loop-agents/)**
 
 
 * Sub-agents를 반복해서 실행하는 에이전트
@@ -36,7 +36,7 @@
 
 <img width="832" alt="image" src="https://github.com/user-attachments/assets/769c3149-68f2-4beb-9c9d-05c2fa12e2aa" />
 
-**3.[Parallel Agents](https://google.github.io/adk-docs/agents/workflow-agents/parallel-agents/)** 
+**[3. Parallel Agents](https://google.github.io/adk-docs/agents/workflow-agents/parallel-agents/)** 
 
 * Sub-agent 리스트를 받아서 여러 에이전트를 동시에(병렬로) 실행함
 
@@ -58,6 +58,7 @@ adk web
 * **OpenAI TTS:** 텍스트를 음성으로 변환할 때 사용 ([문서](https://platform.openai.com/docs/guides/text-to-speech))
 * **FFmpeg:** 생성된 이미지와 오디오를 합쳐서 최종 쇼츠 비디오로 렌더링 ([공식 사이트](https://ffmpeg.org))
 * *참고: 로컬 시스템에 FFmpeg 설치가 반드시 되어 있어야 함*
+
 
 
 
