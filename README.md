@@ -120,7 +120,7 @@ streamlit run main.py
 ```
 ### **[Supported Tools & MCP Servers]**
 
-OpenAI Agents SDK에서 지원하는 주요 도구 목록입니다. (※ 일부 도구는 OpenAI API 사용료가 발생.)
+OpenAI Agents SDK에서 지원하는 주요 도구 목록. (※ OpenAI API 사용료가 발생.)
 
 #### **1. Built-in Tools (기본 제공 도구)**
 
@@ -148,5 +148,6 @@ OpenAI Agents SDK에서 지원하는 주요 도구 목록입니다. (※ 일부 
 * **Python 버전:** Windows 환경에서 3.13.x 버전 호환성 이슈가 있을 경우, **Python 3.11** 사용을 권장.
 * **비용 발생:** File Search(Vector Store 유지비) 및 Image Generation 등은 OpenAI API 정책에 따라 유료 과금이 발생 주의.
   
+
 
 
