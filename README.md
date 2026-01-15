@@ -42,7 +42,7 @@
 
 <img width="593" height="290" alt="image" src="https://github.com/user-attachments/assets/6909c57a-4d75-4753-ae52-39ef258c6264" />
 
- ### **[Callback](https://google.github.io/adk-docs/callbacks/?utm_source=chatgpt.com)** 
+ ### **[[Callback](https://google.github.io/adk-docs/callbacks/?utm_source=chatgpt.com)]** 
  
 에이전트의 내부 코드를 수정하지 않고도, 특정 실행 시점에서 동작을 관찰하거나 사용자 정의 로직을 추가하여 제어할 수 있는 기능 
 
@@ -53,7 +53,7 @@
 * **개입 및 수정:** 특정 조건에서 에이전트의 동작을 변경하거나 사용자 승인 단계 추가
 * **로깅:** 실행 로그 저장 및 외부 시스템 연동
  
-* **핵심 개념:** 에이전트 프로세스 중간에 설치된 **'체크포인트'** 혹은 **'감시 카메라'**와 같다고 이해하면 쉽다.
+* **핵심 개념:** 에이전트 프로세스 중간에 설치된 **'체크포인트'** 혹은 **감시 카메라**와 같다고 이해하면 쉽다.
  
 ### **[실행 방법]**
 
@@ -70,6 +70,7 @@ adk web
 * **OpenAI TTS:** 텍스트를 음성으로 변환할 때 사용 ([문서](https://platform.openai.com/docs/guides/text-to-speech))
 * **FFmpeg:** 생성된 이미지와 오디오를 합쳐서 최종 쇼츠 비디오로 렌더링 ([공식 사이트](https://ffmpeg.org))
 * *참고: 로컬 시스템에 FFmpeg 설치가 반드시 되어 있어야 함*
+
 
 
 
