@@ -1,33 +1,64 @@
-from google.adk.agents import Agent 
+from google.genai import types # google ai api와 상호작용하는 ptyhon 클라이언트 라이브러리임. 
+from google.adk.tools import ToolContext
+from google.adk.agents import Agent
+from google.adk.tools.agent_tool import AgentTool
 from google.adk.models.lite_llm import LiteLlm
-from pydantic import ConfigDict
-# 모든 모델에 대해 임의 타입 허용 설정 (필요 시)
-ConfigDict(arbitrary_types_allowed=True)
+from .sub_agents.data_analyst import data_analyst
+from .sub_agents.financial_analyst import financial_analyst
+from .sub_agents.news_analyst import news_analyst
+from .prompt import PROMPT
+
 MODEL = LiteLlm("openai/gpt-4o")
 
-def get_weather(city: str) -> str:
-    return f"The weather in {city} is 30 degrees"
+# financial_advisor가 사용자가 레포트를 저장하고 싶을 때 호출할 tool(사용자가 이 조언으로 리포트를 만들고 싶다 했을 때 호출하게 될 툴임. )
+# finacial_advisor가 artifact api를 사용해서 그 파일을 저장하고 나면 파일이 artifacts box에 나타남
+async def save_advice_report(tool_context: ToolContext, summary: str, ticker: str):
+    state = tool_context.state
+    data_analyst_result = state.get("data_analyst_result")
+    financial_analyst_result = state.get("financial_analyst_result")
+    news_analyst_analyst_result = state.get("news_analyst_analyst_result")
+    report = f"""
+        # Excetuve Summary and Advice:
+        {summary}
 
-def convert_units(degrees: int) -> str:
-    return f"That is 40 farenheit"
+        ## Data Analyst Report:
+        {data_analyst_result}
 
-geo_agent = Agent(
-    name = "GeoAgent",
-    instruction= "You help with geo questions",
-    description= "Transfer to this agent when you have a geo related question"
-    # root agent(weather_agent)가 해당 agent의 설명을 읽어야 해서 ! root agent를 위한 설명임 
-    # 그래야 언제 transfer해야 하는지 알게 됨 
+        ## Financial Analyst Report:
+        {financial_analyst_result}
+        
+        ## News Analyst Report:
+        {news_analyst_analyst_result}
+    """
+    state["report"] = report
+
+    filename = f"{ticker}_investment_advice.md"
+
+    # 파일 만드는 거임! (google.genai 사용 )
+    artifact = types.Part(  # types는 그냥 pydantic model 뭉치임 
+        inline_data=types.Blob(
+            mime_type="text/markdown",
+            data=report.encode("utf-8"),
+        )
+    )
+
+    await tool_context.save_artifact(filename, artifact)
+
+    return {
+        "success": True,
+    }
+
+
+financial_advisor = Agent(
+    name="financial_analyst",
+    instruction=PROMPT,
+    model=MODEL,
+    tools=[
+        AgentTool(agent=financial_analyst),
+        AgentTool(agent=news_analyst),
+        AgentTool(agent=data_analyst),
+        save_advice_report,
+    ],
 )
 
-weather_agent = Agent(
-    name ="WeatherAgent",
-    instruction="You help the user with weather related questions",  # 너는 날씨 관련 질문을 받아서 사용자를 도와줄거야 
-    model = MODEL,
-    tools=[get_weather,convert_units],
-    sub_agents=[ # openai sdk 에서 handoff랑 같음 
-        geo_agent
-    ]
-)
-
-# 반드시 있어야 하는 변수임 
-root_agent = weather_agent
+root_agent = financial_advisor

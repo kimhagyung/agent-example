@@ -457,7 +457,7 @@ wheels = [
 ]
 
 [[package]]
-name = "financial-analyst"
+name = "financial_analyst"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
