@@ -7,20 +7,10 @@ import asyncio
 import streamlit as st
 from agents import (
     Runner,
-    SQLiteSession,
-    function_tool, 
-    RunContextWrapper 
+    SQLiteSession 
 )
 from agents.voice import AudioInput, VoicePipeline
 from models import UserAccountContext # 9.1에 추가  
-
-# 해당 tool을 모든 에이전트들에게 줄 수 있음 . 모든 에이전트들에게 줄 수없으니 올바른 context에 접근할 수 있는 tool을 주고싶
-# 예를들어 환불 에이전트면 tool을 만들어서 에이전트가 오직 재무 거래만 가져올 수 있도록 
-# 구매 정보 에이전트면 구매관련 정보만 가져오는 tool을 만들거나 ㅇㅇ 
-@function_tool
-def get_user_tied(wrapper : RunContextWrapper[UserAccountContext]):  # wrapper로 넣는 이유는 
-    # 아래 context = user_account_ctx  을 해줬기에 해당 get_user_tied tools로 context를 가져올 수 있음 
-    return  f"The user {wrapper.context.customer_id} has a {wrapper.context.tier} account" # 이 고객 아이디는 이 등급의 계정을 가지고 있습니다. 
  
 client = OpenAI()
 
