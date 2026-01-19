@@ -7,3 +7,6 @@ class UserAccountContext(BaseModel):
     name : str
     tier: str = "basic" # 티어는 외에도 premium, entreprise 등등 있을거임
 
+class InputGuardRailOutput(BaseModel):
+    is_off_topic : bool 
+    reason : str # 이거 도와줄 수 없어 ~ 이 이유 때문에 

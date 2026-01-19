@@ -1,16 +1,12 @@
 from email import message
 import dotenv
-
 dotenv.load_dotenv()
 from openai import OpenAI
 import asyncio
 import streamlit as st
-from agents import (
-    Runner,
-    SQLiteSession 
-)
-from agents.voice import AudioInput, VoicePipeline
+from agents import  Runner, SQLiteSession, InputGuardrailTripwireTriggered
 from models import UserAccountContext # 9.1에 추가  
+from my_agents.triage_agent import triage_agent
  
 client = OpenAI()
 
@@ -29,6 +25,8 @@ if "session" not in st.session_state:
     )
 session = st.session_state["session"] 
 
+if "agent" not in st.session_state:
+    st.session_state["agent"] = triage_agent
 
 # 챗팅 UI에 대화 기록을 보여주는 함수 
 async def paint_history():
@@ -56,21 +54,36 @@ async def run_agent(audio_input):
 
         st.session_state["text_placeholder"] = text_placeholder
 
-        stream =  Runner.run_streamed(
-            agent, 
-            message, 
-            sesion= session
-            context = user_account_ctx 
-             # runner에 context를 넣으니깐 이제 모든 function_tool들이 context를 받게 됨 (DI 의존성주입 같은거임 )
-             # 위에다 넣으면 openai agents sdk가 모든 function_tool에 첫번쨰 argument로 넣어줄거임임(get_user_tier의 첫번쨰 ㅇㅇ)
-        )
+        try
+            stream =  Runner.run_streamed(
+                triage_agent, 
+                message, 
+                sesion= session,
+                context = user_account_ctx 
+                # runner에 context를 넣으니깐 이제 모든 function_tool들이 context를 받게 됨 (DI 의존성주입 같은거임 )
+                # 위에다 넣으면 openai agents sdk가 모든 function_tool에 첫번쨰 argument로 넣어줄거임임(get_user_tier의 첫번쨰 ㅇㅇ)
+            )
 
-        async for event in stream.stream_events():
-                if event.type == "raw_response_event": 
-                    pass
- 
+            async for event in stream.stream_events():
+                    if event.type == "raw_response_event":  
+                        if event.data.type == "response.output_text.delta":
+                            response += event.data.delta
+                            text_placeholder.write(response.replace("$", r"\$"))  
+        
+        except InputGuardrailTripwireTriggered:
+            st.write("그건 도와줄 수없어")
 
+  
+message = st.chat_input(
+    "Write a message for your assistant." 
+)
 
+if message:
+    if "text_placeholder" in st.session_state:
+        st.session_state["text_placeholder"].empty()
+
+    if  message:
+        pass
 audio_input = st.audio_input(
     "Record your message",
 )
