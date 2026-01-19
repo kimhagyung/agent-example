@@ -13,6 +13,7 @@ from google.adk.models.llm_response import LlmResponse
 MODEL = LiteLlm(model="openai/gpt-4o")
 # content_planner  가 결정적으로 영상메이커 이기 때문에 지금 openai/gpt-4o 이 모델 말고 더 비싼 모델을 사용해도됨 
 
+# 가드레일/필터링 (LLM모델이 생성되기 전 사용자의 입력에 대한 콜백)
 def before_model_callback(
     callback_context : CallbackContext,
     llm_request :LlmRequest):
@@ -21,7 +22,7 @@ def before_model_callback(
    last_message = history[-1]
    if last_message.role == "user":
     text =  last_message.parts[0].text
-    if "후무스" in text:  
+    if "후무스" in text:  # 제외 텍스트 설정 
          #에러나 예외나 string을 반환하는게 아니라 공식문서에 보면 LLMresponse 타입을 리턴하라함 
          # 여기서 return하는건 모든지 llm이 보낸 메시지로 간주된다.
         return LlmResponse(
@@ -46,7 +47,7 @@ shorts_producer_agent = Agent(
         AgentTool(agent=asset_generator_agent),
         AgentTool(agent=video_assembler_agent),
     ],
-    before_model_callback=before_model_callback
+    before_model_callback=before_model_callback # 미사용시 주석 후 사용 
 )
 
 root_agent = shorts_producer_agent

@@ -1,3 +1,4 @@
+# 총 길이 20초 이내의 JSON형식 및 9:16 세로형 쇼츠 
 CONTENT_PLANNER_DESCRIPTION = (
     "Creates complete structured content plan for vertical YouTube Shorts videos (9:16 portrait format) in one step. "
     "Analyzes topic for key teaching points, determines optimal number of scenes and timing, "
@@ -5,6 +6,10 @@ CONTENT_PLANNER_DESCRIPTION = (
     "and plans embedded text overlays. Outputs structured JSON format with max 20 seconds total."
 )
 
+# Your Task (임무): 사용자가 주제를 주면 최대 20초짜리 세로형 쇼츠 대본을 짜라. (20초를 절대 넘기면 안 됨을 강조)
+# Process (작업 순서)
+# Output Format (출력 형식): JSON 형식 ,  포함될 정보 기입 
+# Guidelines (지켜야 할 규칙들):
 CONTENT_PLANNER_PROMPT = """
 You are the ContentPlannerAgent, responsible for creating complete structured content plans for vertical YouTube Shorts videos (9:16 portrait format).
 

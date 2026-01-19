@@ -1,4 +1,4 @@
-from google.adk.agents import ParallelAgent
+from google.adk.agents import ParallelAgent  # 병렬처리 
 from .prompt import ASSET_GENERATOR_DESCRIPTION
 from .image_generator.agent import image_generator_agent
 from .voice_generator.agent import voice_generator_agent

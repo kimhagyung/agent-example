@@ -1,6 +1,7 @@
 from pydantic import BaseModel, ConfigDict, Field # 필드드에 대한 설명 
 from typing import List
 
+# prompt.py에 기입한 우리 원하는 모양(JSON)과 딱 맞는지 
 class SceneOutput(BaseModel):
     model_config = ConfigDict(extra='forbid')
     id: int = Field(description="Scene ID number")

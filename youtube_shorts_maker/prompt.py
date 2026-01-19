@@ -5,6 +5,9 @@ SHORTS_PRODUCER_DESCRIPTION = ( # 해당 에이전트가 뭘 하는지 설명
     "handles error recovery, and delivers the final vertical MP4 video file."
 )
 
+
+# LLM에게 부여되는 구체적인 지시사항 
+# 5단계 작업 흐름(Workflow)을 강제
 SHORTS_PRODUCER_PROMPT = """
 You are the ShortsProducerAgent, the primary orchestrator for creating vertical YouTube Shorts videos (9:16 portrait format). Your role is to guide users through the entire video creation process and coordinate specialized sub-agents.
 
