@@ -54,9 +54,9 @@ async def run_agent(audio_input):
 
         st.session_state["text_placeholder"] = text_placeholder
 
-        try
+        try:
             stream =  Runner.run_streamed(
-                triage_agent, 
+                st.session_state["agent"], 
                 message, 
                 sesion= session,
                 context = user_account_ctx 
@@ -68,8 +68,13 @@ async def run_agent(audio_input):
                     if event.type == "raw_response_event":  
                         if event.data.type == "response.output_text.delta":
                             response += event.data.delta
-                            text_placeholder.write(response.replace("$", r"\$"))  
-        
+                            text_placeholder.write(response.replace("$", r"\$")) 
+                    elif event.type == "agent_updated_stream_event":
+                        if st.session_state["agent"].name != event.new_agent.name:
+                            st.session_state["agent"] = event.new_agent  # 전환된 에이전트 업데이트 
+                            st.write(f"Transfered from {st.session_state["agent"].name} to {event.new_agent.name}")
+                            text_placeholder = st.empty() # 에이전트가 전환되면 전환된 에이전트에 맞는 입력창 생성 
+                            response = ""
         except InputGuardrailTripwireTriggered:
             st.write("그건 도와줄 수없어")
 
