@@ -1,16 +1,22 @@
 # 역할 - 유저의 입력을 받고 유저의 질문을 받아서 그걸 올바른 에이전트한테 전달하는것 
 # 그리고 해당 에이전트의 역할 중 하나는 guardrail(안정장치)를 두는것임. 
 # 질문을 살펴보고 주제와 관련없는 질문인지 확인 하거나 질문이 무례하거나 너무 선정적일수도 있거나 등등 의 질문에 대해 도와주기를 거부 하는 역할을 함
-
-from agents import Agent, RunContextWrapper, input_guardrail, Runner, GuardrailFunctionOutput
-from models import UserAccountContext, InputGuardRailOutput
+import streamlit as st 
+from agents import Agent, RunContextWrapper, input_guardrail, Runner, GuardrailFunctionOutput, handoff
+from agents.extensions.handoff_prompt import RECOMMENDED_PROMPT_PREFIX # 기본 제공 들어가면 뭔지 보임 , 에이전트가 handoff가 있으면 이걸 넣ㅇ는걸 추천 
+from agents.extensions import handoff_filters # 예시 사용 
+from models import UserAccountContext, InputGuardRailOutput , HandoffData
+from my_agents.account_agent import account_agent
+from my_agents.billing_agent import billing_agent
+from my_agents.order_agent import order_agent
+from my_agents.technical_agent import technical_agent 
 
 # 에이전트 생성 (models.py에 지정된 형식으로 output응답 지시 )
 input_guardrail_agent = Agent(
     name ="Input Guardrail Agent", 
     # instructions : 입력 안정장치 지침에는 규칙이 뭔지 적을 수 있음. (어떤게 허용되고 안되는지)
     instructions="""
-        Ensure the user's request specifically pertains to User Account details, Billing inquiries, Order information, or Technical Support issues, and is not off-topic. If the request is off-topic, return a reason for the tripwire. You can make small conversation with the user, specially at the beginning of the conversation, but don't help with requests that are not related to User Account details, Billing inquiries, Order information, or Technical Support issues.
+        Ensure the user's request specifically pert ains to User Account details, Billing inquiries, Order information, or Technical Support issues, and is not off-topic. If the request is off-topic, return a reason for the tripwire. You can make small conversation with the user, specially at the beginning of the conversation, but don't help with requests that are not related to User Account details, Billing inquiries, Order information, or Technical Support issues.
     """,  # 유저 요청에 대해 꼭 확인 (계정정보,결제문의 등등.. 그 외에는 전부 tripwire(경보장치) 울려야함, 물론 처음 간단한 대화는 ㄷ가능)
     output_type =InputGuardRailOutput 
 )  # 에이전트가 구조화된 대답해줌 
@@ -97,8 +103,44 @@ def dynamic_triage_agent_instructions(
     """ 
 
 
+def make_hankoff(agnet):
+    return  handoff(
+            agent = agnet,
+            on_handoff =handle_handoff ,# handoff가 일어날 때 호출되는 함수 
+            input_type = HandoffData, 
+            # 새로운 에이전트가 볼 데이터를 골라서 넘길 수 있게 해주는 것 
+            input_filter = handoff_filters.remove_all_tools
+            # 이전 에이전트와의 대화에서 기록을 몇 개 지움 (tool 호출을 싹 제거) transfer 상황에서 해당 필터를 쓰면 그 tool 사용기ㅇ록지워주고 유저와 에이전트 간 메시지만 남김  
+        )
+
+# handoff가 일어날 때마다 실행되는 함수 
+def handle_handoff(
+    wrapper : RunContextWrapper[UserAccountContext], # context 여기도 가져올 수있음    
+    input_data : HandoffData
+):
+     with st.sidebar :
+        # handoff 에 대한 로그 좋게 남기기  
+        st.write(f"""
+            Handing off to {input_data.to_agent_name}
+            Reason : {input_data.reason}
+            Issue Type : {input_data.issue_type}
+            Description : {input_data.issue_descrtiption}
+        """)
+
 triage_agent = Agent(
     name = "Triage Agent",
     instructions= dynamic_triage_agent_instructions,  # str을 넘기거나 문자열 반환 함수!! 를 넘길 수있음.
-    input_guardrails=[off_topic_guardrail]
+    input_guardrails=[off_topic_guardrail],
+    # tools =[
+    #     technical_agent.as_tool(
+    #         tool_name="Technical Help Tool",
+    #         tool_description="Use this when the user needs tech support"
+    #     )
+    # ]
+    handoffs=[
+        make_hankoff(technical_agent),
+        make_hankoff(billing_agent),
+        make_hankoff(account_agent),
+        make_hankoff(order_agent), 
+    ],
 )
