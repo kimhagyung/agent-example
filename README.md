@@ -25,7 +25,8 @@
 
 * **범위:** Context가 볼 수 있는 데이터는 기본적으로 '대화 기록'임. (단순히 AI에게 모든 걸 한 번에 넘기는 구조가 아님)
 
-<img width="545" height="308" alt="image" src="[https://github.com/user-attachments/assets/09513eef-4ab9-48c0-b320-d5b6b88dc6e2](https://github.com/user-attachments/assets/09513eef-4ab9-48c0-b320-d5b6b88dc6e2)" />
+![Uploading image.png…]()
+
 
 ### **[Guardrails]**
 
@@ -41,3 +42,4 @@
 * 에이전트가 정해진 규칙을 어기면 작동함.
 * Tripwire가 작동한다는 것은 더 이상 대화를 진행하면 안 된다는 신호임.
 * 답변이 부적절할 경우 출력을 차단하고 대화를 중단시킴. 
+
