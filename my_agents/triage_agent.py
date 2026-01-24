@@ -19,7 +19,7 @@ input_guardrail_agent = Agent(
         Ensure the user's request specifically pert ains to User Account details, Billing inquiries, Order information, or Technical Support issues, and is not off-topic. If the request is off-topic, return a reason for the tripwire. You can make small conversation with the user, specially at the beginning of the conversation, but don't help with requests that are not related to User Account details, Billing inquiries, Order information, or Technical Support issues.
     """,  # 유저 요청에 대해 꼭 확인 (계정정보,결제문의 등등.. 그 외에는 전부 tripwire(경보장치) 울려야함, 물론 처음 간단한 대화는 ㄷ가능)
     output_type =InputGuardRailOutput 
-)  # 에이전트가 구조화된 대답해줌 
+)  # 에이전트가 구조화된 t대답해줌 
 
 
 # triage_agent가 호출되기 전에 실행 
