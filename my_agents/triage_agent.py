@@ -124,7 +124,7 @@ def handle_handoff(
             Handing off to {input_data.to_agent_name}
             Reason : {input_data.reason}
             Issue Type : {input_data.issue_type}
-            Description : {input_data.issue_descrtiption}
+            Description : {input_data.issue_description}
         """)
 
 triage_agent = Agent(

@@ -8,7 +8,6 @@ from tools import (
 )
 from output_guardrails import technical_output_guardrail
 
-
 def dynamic_technical_agent_instructions(
     wrapper: RunContextWrapper[UserAccountContext],
     agent: Agent[UserAccountContext],

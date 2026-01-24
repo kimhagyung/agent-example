@@ -4,7 +4,7 @@ dotenv.load_dotenv()
 from openai import OpenAI
 import asyncio
 import streamlit as st
-from agents import  Runner, SQLiteSession, InputGuardrailTripwireTriggered
+from agents import  Runner, SQLiteSession, InputGuardrailTripwireTriggered, OutputGuardrailTripwireTriggered
 from models import UserAccountContext # 9.1에 추가  
 from my_agents.triage_agent import triage_agent
  
@@ -15,6 +15,7 @@ user_account_ctx = UserAccountContext(
     customer_id=1,
     name="nico",
     tier="basic",
+    email="nico@las.com" 
 )
 
 
@@ -58,7 +59,7 @@ async def run_agent(audio_input):
             stream =  Runner.run_streamed(
                 st.session_state["agent"], 
                 message, 
-                sesion= session,
+                session= session,
                 context = user_account_ctx 
                 # runner에 context를 넣으니깐 이제 모든 function_tool들이 context를 받게 됨 (DI 의존성주입 같은거임 )
                 # 위에다 넣으면 openai agents sdk가 모든 function_tool에 첫번쨰 argument로 넣어줄거임임(get_user_tier의 첫번쨰 ㅇㅇ)
@@ -76,8 +77,19 @@ async def run_agent(audio_input):
                             text_placeholder = st.empty() # 에이전트가 전환되면 전환된 에이전트에 맞는 입력창 생성 
                             response = ""
         except InputGuardrailTripwireTriggered:
-            st.write("그건 도와줄 수없어")
-
+            # 1. 이미 출력된 답변이 있다면 지웁니다.
+            if "text_placeholder" in st.session_state:
+                st.session_state["text_placeholder"].empty()
+            
+            # 2. 에러 메시지를 띄웁니다.
+            st.write("사용자의 요청에서 부적절한 내용이 감지되어 중단되었습니다.")
+        except OutputGuardrailTripwireTriggered: 
+            # 1. 이미 출력된 불적절한 답변을 화면에서 즉시 삭제
+            if "text_placeholder" in st.session_state:
+                st.session_state["text_placeholder"].empty()
+            # 2. 경고 메시지 출력
+            st.write("보안 정책상 부적절한 답변이 감지되어 내용을 표시할 수 없습니다.")
+        
   
 message = st.chat_input(
     "Write a message for your assistant." 
@@ -86,19 +98,10 @@ message = st.chat_input(
 if message:
     if "text_placeholder" in st.session_state:
         st.session_state["text_placeholder"].empty()
-
     if  message:
-        pass
-audio_input = st.audio_input(
-    "Record your message",
-)
-
-if audio_input:
-
-    with st.chat_message("human"):
-        st.audio(audio_input)
-    asyncio.run(run_agent(audio_input))
-
+        with st.chat_message("human"):
+            st.write(message)
+        asyncio.run(run_agent(message))
 
 with st.sidebar:
     reset = st.button("Reset memory")
