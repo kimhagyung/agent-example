@@ -1,5 +1,5 @@
-from email import message
 import dotenv
+
 dotenv.load_dotenv()
 from openai import OpenAI
 import asyncio
@@ -7,18 +7,19 @@ import streamlit as st
 from agents import  Runner, SQLiteSession, InputGuardrailTripwireTriggered, OutputGuardrailTripwireTriggered
 from models import UserAccountContext # 9.1에 추가  
 from my_agents.triage_agent import triage_agent
-from agents.voice import AudioInputs
+from agents.voice import AudioInput, VoicePipeline
 import numpy as np
 import wave, io
- 
+from workflow  import CustomWorkflow
+import sounddevice as sd # 이미 컴터에 깔려있음 
+
 client = OpenAI()
 
 # 9.1에 추가 
 user_account_ctx = UserAccountContext(
     customer_id=1,
     name="nico",
-    tier="basic",
-    email="nico@las.com" 
+    tier="basic", 
 )
 
 
@@ -53,20 +54,32 @@ async def run_agent(audio_input):
             # 1. audio -> numpy 배열로 변환 
             audio_array = convert_audio(audio_input)
             # audio 파일 객체 생성 
-            audio = AudioInputs(buffer=audio_array)
+            audio = AudioInput(buffer=audio_array)
             # 2. custom workflow 생성 (stream을 실행할 떄 session이랑 context 그리고 session 에이전트랑 엮어서 돌리기 위해)
-            
-            # 3. pipeline 생성 
+            workflow = CustomWorkflow(context=user_account_ctx)
+            # 3. pipeline 생성  
+            pipeline = VoicePipeline(workflow = workflow)
 
-            stream =  Runner.run_streamed(
-                st.session_state["agent"], 
-                message, 
-                session= session,
-                context = user_account_ctx 
-                # runner에 context를 넣으니깐 이제 모든 function_tool들이 context를 받게 됨 (DI 의존성주입 같은거임 )
-                # 위에다 넣으면 openai agents sdk가 모든 function_tool에 첫번쨰 argument로 넣어줄거임임(get_user_tier의 첫번쨰 ㅇㅇ)
-            ) 
-                  
+            status_container.update(label="Runner workflow", state="running")
+
+            #pipeline 실행 
+            result = await pipeline.run(audio)
+
+            player = sd.OutputStream(
+                samplerate=24000,
+                channels = 1, 
+                dtype = np.int16
+            )
+            player.start()
+
+            status_container.update(state="complete")
+
+            # 스트리밍 방식으로 실시간 번역 함 
+            async for event in result.stream():
+                if event.type == 'voice_stream_event_audio': # 새로운 오디오 조각 왔다는 뜻 
+                    player.write(event.data)
+
+
         except InputGuardrailTripwireTriggered:  
             st.write("사용자의 요청에서 부적절한 내용이 감지되어 중단되었습니다.")
         except OutputGuardrailTripwireTriggered:  
@@ -80,7 +93,7 @@ audio_input = st.audio_input(
 if audio_input: 
     with st.chat_message("human"):
         st.audio(audio_input)
-    asyncio.run(run_agent(message))
+    asyncio.run(run_agent(audio_input))
 
 with st.sidebar:
     reset = st.button("Reset memory")

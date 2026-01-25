@@ -6,7 +6,7 @@ class UserAccountContext(BaseModel):
     customer_id : int
     name : str
     tier: str = "basic" # 티어는 외에도 premium, entreprise 등등 있을거임
-    email : str
+    email : str = "nico@co.kr"
 
 class InputGuardRailOutput(BaseModel):
     is_off_topic : bool 
