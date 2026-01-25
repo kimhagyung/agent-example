@@ -7,6 +7,9 @@ import streamlit as st
 from agents import  Runner, SQLiteSession, InputGuardrailTripwireTriggered, OutputGuardrailTripwireTriggered
 from models import UserAccountContext # 9.1에 추가  
 from my_agents.triage_agent import triage_agent
+from agents.voice import AudioInputs
+import numpy as np
+import wave, io
  
 client = OpenAI()
 
@@ -29,33 +32,32 @@ session = st.session_state["session"]
 if "agent" not in st.session_state:
     st.session_state["agent"] = triage_agent
 
-# 챗팅 UI에 대화 기록을 보여주는 함수 
-async def paint_history():
-    messages = await session.get_items()
+def convert_audio(audio_input):
+    audio_data = audio_input.getvalue()
+    
+    with wave.open(io.BytesIO(audio_data), "rb") as wav_file:
+        audio_frames = wav_file.readframes(-1)
 
-    for message in messages:
-        if "role" in message:
-            with st.chat_message(message["role"]):
-                if message["role"] == "user":
-                    content = message["content"]
-                    if isinstance(content,str):                            
-                        st.write(message["content"]) 
-                else: # assistant 
-                    if message["type"] == "message":
-                        st.write(message["content"][0]["text"].replace("$", r"\$"))
-
-asyncio.run(paint_history()) 
-
+    return np.frombuffer(
+        audio_frames,
+        dtype = np.int16
+    )
 
 async def run_agent(audio_input):
 
     with st.chat_message("ai"): 
-        text_placeholder = st.empty()
-        response = ""
-
-        st.session_state["text_placeholder"] = text_placeholder
-
+         
+        status_container = st.status("⌛ Processing voice message...") 
         try:
+
+            # 1. audio -> numpy 배열로 변환 
+            audio_array = convert_audio(audio_input)
+            # audio 파일 객체 생성 
+            audio = AudioInputs(buffer=audio_array)
+            # 2. custom workflow 생성 (stream을 실행할 떄 session이랑 context 그리고 session 에이전트랑 엮어서 돌리기 위해)
+            
+            # 3. pipeline 생성 
+
             stream =  Runner.run_streamed(
                 st.session_state["agent"], 
                 message, 
@@ -63,45 +65,22 @@ async def run_agent(audio_input):
                 context = user_account_ctx 
                 # runner에 context를 넣으니깐 이제 모든 function_tool들이 context를 받게 됨 (DI 의존성주입 같은거임 )
                 # 위에다 넣으면 openai agents sdk가 모든 function_tool에 첫번쨰 argument로 넣어줄거임임(get_user_tier의 첫번쨰 ㅇㅇ)
-            )
-
-            async for event in stream.stream_events():
-                    if event.type == "raw_response_event":  
-                        if event.data.type == "response.output_text.delta":
-                            response += event.data.delta
-                            text_placeholder.write(response.replace("$", r"\$")) 
-                    elif event.type == "agent_updated_stream_event":
-                        if st.session_state["agent"].name != event.new_agent.name:
-                            st.session_state["agent"] = event.new_agent  # 전환된 에이전트 업데이트 
-                            st.write(f"Transfered from {st.session_state["agent"].name} to {event.new_agent.name}")
-                            text_placeholder = st.empty() # 에이전트가 전환되면 전환된 에이전트에 맞는 입력창 생성 
-                            response = ""
-        except InputGuardrailTripwireTriggered:
-            # 1. 이미 출력된 답변이 있다면 지웁니다.
-            if "text_placeholder" in st.session_state:
-                st.session_state["text_placeholder"].empty()
-            
-            # 2. 에러 메시지를 띄웁니다.
+            ) 
+                  
+        except InputGuardrailTripwireTriggered:  
             st.write("사용자의 요청에서 부적절한 내용이 감지되어 중단되었습니다.")
-        except OutputGuardrailTripwireTriggered: 
-            # 1. 이미 출력된 불적절한 답변을 화면에서 즉시 삭제
-            if "text_placeholder" in st.session_state:
-                st.session_state["text_placeholder"].empty()
-            # 2. 경고 메시지 출력
+        except OutputGuardrailTripwireTriggered:  
             st.write("보안 정책상 부적절한 답변이 감지되어 내용을 표시할 수 없습니다.")
         
   
-message = st.chat_input(
-    "Write a message for your assistant." 
+audio_input = st.audio_input(
+    "Record your message" 
 )
 
-if message:
-    if "text_placeholder" in st.session_state:
-        st.session_state["text_placeholder"].empty()
-    if  message:
-        with st.chat_message("human"):
-            st.write(message)
-        asyncio.run(run_agent(message))
+if audio_input: 
+    with st.chat_message("human"):
+        st.audio(audio_input)
+    asyncio.run(run_agent(message))
 
 with st.sidebar:
     reset = st.button("Reset memory")
