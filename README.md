@@ -70,6 +70,12 @@ adk web
 * **OpenAI TTS:** 텍스트를 음성으로 변환할 때 사용 ([문서](https://platform.openai.com/docs/guides/text-to-speech))
 * **FFmpeg:** 생성된 이미지와 오디오를 합쳐서 최종 쇼츠 비디오로 렌더링 ([공식 사이트](https://ffmpeg.org))
 * *참고: 로컬 시스템에 FFmpeg 설치가 반드시 되어 있어야 함*
+* litellm 설치 필수
+```bash
+pip install litellm
+
+```
+* https://platform.openai.com/settings/organization/general -> Verifications -> Individual 승인 후 Approved 
 
 
 
