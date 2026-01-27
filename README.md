@@ -31,27 +31,36 @@
 
 > [Guardrails Example Code](https://github.com/kimhagyung/agent-example/commit/227029483121e0638c66d34fa2151826c135e6b2)
 
-* **주제 이탈 방지:** 자사 서비스와 관련 없는 대화로 인한 어마어마한 토큰 비용 낭비를 막음.
+* **주제 이탈 방지:** 자사 서비스와 관련 없는 대화로 인한 불필요한 토큰 비용 낭비를 방지함.
 * **Guardrails 종류:**
-1. **입력(Input) Guardrails:** 유저의 질문이 적절한지 검사.
-2. **출력(Output) Guardrails:** 에이전트의 답변을 별도의 에이전트가 규칙에 따라 검토.
--> input, output Guardrails는 이름만 다를 뿐 같은 개념이다. 
+1. **입력(Input) Guardrails:** 유저의 질문이 서비스 목적에 적절한지 사전에 검사.
+2. **출력(Output) Guardrails:** 에이전트의 답변을 별도의 에이전트가 규칙에 따라 최종 검토.
+
+
+* **참고:** Input과 Output Guardrails는 적용 시점만 다를 뿐, 검증 로직 자체는 유사한 개념임.
+
 
 * **[Tripwire (경보 장치)]**
-* 에이전트가 정해진 규칙을 어기면 작동함.
-* Tripwire가 작동한다는 것은 더 이상 대화를 진행하면 안 된다는 신호임.
-* 답변이 부적절할 경우 출력을 차단하고 대화를 중단시킴. 
+* 에이전트가 정해진 규칙(보안, 정책 등)을 어기려고 할 때 즉각 작동하는 안전장치.
+* Tripwire가 작동했다는 것은 시스템이 위험을 감지하여 더 이상 대화를 진행하면 안 된다는 신호임.
+* 부적절한 답변이 생성될 경우 출력을 즉시 차단하고 대화를 중단시킴.
+
 
 * **[Handoffs]**
-* 대화 자체가 다른 에이전트에 전달
-* 예시로 콜센터에서 자신의 부서가 담당하지 않은 일에 대해서는 다른 부서로 전화를 넘기는 것을 생각하면됨.(만약 handoff가 아닌 tools로서 에이전트를 사용했다면 상담원이 전화를 넘기지 않고 그 담당직원한테 물어보고 다시 돌아와서 나에게 말해줄것임)
-  
+* 대화의 제어권 자체를 다른 전문 에이전트에게 완전히 넘기는 방식.
+* **비유:** 콜센터에서 담당 부서가 아닐 경우 다른 부서로 전화를 연결해 주는 것과 같음.
+* **차이점:** 만약 Handoff가 아닌 'Tool'로서 에이전트를 호출했다면, 상담원이 전화를 끊지 않고 다른 직원에게 물어본 뒤 다시 나에게 전달해 주는 방식이 됨.
+
+
 * **[Hooks]**
-* [lifecycle](https://openai.github.io/openai-agents-python/ref/lifecycle/#agents.lifecycle.AgentHooks)
-*  hooks은 event를 감지하는 listener 같은 것임
-*  구독하듯이 연결해서 쓸 수있음
-*  에이전트가 호출되기 전에 시작하거나 끝날때 시작
-*  모니터링, 기록용으로 꼭 필요
- 
+> [Lifecycle Hooks Document](https://openai.github.io/openai-agents-python/ref/lifecycle/#agents.lifecycle.AgentHooks)
+
+
+* **개념:** 특정 이벤트가 발생할 때 실행되는 리스너(Listener) 역할.
+* **구독 방식:** 필요한 시점에 함수를 연결하여 사용할 수 있음.
+* **시점:** 에이전트 호출 전(on_start)이나 호출 완료 후(on_end) 등에 실행됨.
+* **용도:** 실시간 모니터링, 데이터 로깅, 상태 추적 등을 위해 필수적으로 사용됨.
+
+
 * **[참고]**
-* [보이스 관련 링크](https://openai.github.io/openai-agents-python/voice/quickstart/)
+* [Realtime Voice 관련 가이드](https://openai.github.io/openai-agents-python/voice/quickstart/)
