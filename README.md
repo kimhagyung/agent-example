@@ -40,19 +40,19 @@
 * **참고:** Input과 Output Guardrails는 적용 시점만 다를 뿐, 검증 로직 자체는 유사한 개념임.
 
 
-* **[Tripwire (경보 장치)]**
+### **[Tripwire (경보 장치)]**
 * 에이전트가 정해진 규칙(보안, 정책 등)을 어기려고 할 때 즉각 작동하는 안전장치.
 * Tripwire가 작동했다는 것은 시스템이 위험을 감지하여 더 이상 대화를 진행하면 안 된다는 신호임.
 * 부적절한 답변이 생성될 경우 출력을 즉시 차단하고 대화를 중단시킴.
 
 
-* **[Handoffs]**
+### **[Handoffs]**
 * 대화의 제어권 자체를 다른 전문 에이전트에게 완전히 넘기는 방식.
 * **비유:** 콜센터에서 담당 부서가 아닐 경우 다른 부서로 전화를 연결해 주는 것과 같음.
 * **차이점:** 만약 Handoff가 아닌 'Tool'로서 에이전트를 호출했다면, 상담원이 전화를 끊지 않고 다른 직원에게 물어본 뒤 다시 나에게 전달해 주는 방식이 됨.
 
 
-* **[Hooks]**
+### **[Hooks]**
 > [Lifecycle Hooks Document](https://openai.github.io/openai-agents-python/ref/lifecycle/#agents.lifecycle.AgentHooks)
 
 
@@ -62,5 +62,6 @@
 * **용도:** 실시간 모니터링, 데이터 로깅, 상태 추적 등을 위해 필수적으로 사용됨.
 
 
-* **[참고]**
+### **[참고]**
 * [Realtime Voice 관련 가이드](https://openai.github.io/openai-agents-python/voice/quickstart/)
+
