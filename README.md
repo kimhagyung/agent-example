@@ -35,11 +35,23 @@
 * **Guardrails 종류:**
 1. **입력(Input) Guardrails:** 유저의 질문이 적절한지 검사.
 2. **출력(Output) Guardrails:** 에이전트의 답변을 별도의 에이전트가 규칙에 따라 검토.
+-> input, output Guardrails는 이름만 다를 뿐 같은 개념이다. 
 
-
-* **Tripwire (경보 장치):**
+* **[Tripwire (경보 장치)]**
 * 에이전트가 정해진 규칙을 어기면 작동함.
 * Tripwire가 작동한다는 것은 더 이상 대화를 진행하면 안 된다는 신호임.
 * 답변이 부적절할 경우 출력을 차단하고 대화를 중단시킴. 
 
-
+* **[Handoffs]**
+* 대화 자체가 다른 에이전트에 전달
+* 예시로 콜센터에서 자신의 부서가 담당하지 않은 일에 대해서는 다른 부서로 전화를 넘기는 것을 생각하면됨.(만약 handoff가 아닌 tools로서 에이전트를 사용했다면 상담원이 전화를 넘기지 않고 그 담당직원한테 물어보고 다시 돌아와서 나에게 말해줄것임)
+  
+* **[Hooks]**
+* [lifecycle](https://openai.github.io/openai-agents-python/ref/lifecycle/#agents.lifecycle.AgentHooks)
+*  hooks은 event를 감지하는 listener 같은 것임
+*  구독하듯이 연결해서 쓸 수있음
+*  에이전트가 호출되기 전에 시작하거나 끝날때 시작
+*  모니터링, 기록용으로 꼭 필요
+ 
+* **[참고]**
+* [보이스 관련 링크](https://openai.github.io/openai-agents-python/voice/quickstart/)
