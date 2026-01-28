@@ -35,10 +35,8 @@ https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutor
 * **ChatCompletionModel을 사용해 다음 speaker를 고르는 팀 구조**
 
 → 모든 agent는 동일한 대화 맥락을 공유하지만, 실제 발화 순서는 selector AI가 동적으로 결정하는 구조
+ 
 
-### **[참고]** <br>
-결과가 한글로 나왔으면 하는 마음에 강의영상을 보며 한글로 번역하여 작성했지만 모델 성능이슈인지 잘 되지는 않았다.
-결과적으로 Autogen을 실제 프로젝트에 사용할 가능성이 낮다고 판단하여, 추가 개선은 진행하지 않았다 (API 비용 이슈 포함).
 
 
 
