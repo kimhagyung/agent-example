@@ -92,10 +92,8 @@ pip install -r requirements.txt
 ```bash
 pip install crewai uv
 ``` 
+ 
 
-
-### **[참고_2]** <br>
-결과물을 한글로 보고 싶어 한글로 변경하려 햇지만 다는 못함.. 
 
 
 
