@@ -75,9 +75,9 @@ class ContentPipelineFlow(Flow[ContentPipelineState]):
     @listen(init_content_pipeline)
     def conduct_research(self):  # 위의 값에 대해 ? 조사중인 함수 (리서치크루)
         researcher = Agent(
-            role="수석 연구원",
-            backstory="당신은 흥미로운 사실과 통찰력을 발굴하는 것을 즐기는 디지털 탐정입니다. 남들이 놓치는 알짜배기 정보를 찾아내는 탁월한 감각을 가지고 있습니다.",
-            goal=f"{self.state.topic}에 관해 가장 흥미롭고 유용한 정보를 찾아내세요.",
+            role="Head Researcher",
+            backstory="You're like a digital detective who loves digging up fascinating facts and insights. You have a knack for finding the good stuff that others miss.",
+            goal=f"Find the most interesting and useful info about {self.state.topic}",
             tools=[web_search_tool],
         )
 
@@ -101,41 +101,38 @@ class ContentPipelineFlow(Flow[ContentPipelineState]):
         llm = LLM(model="openai/o4-mini", response_format=BlogPost)
 
        
-        if blog_post is None:
-            # [수정됨] 블로그 생성 프롬프트 (한국어)
+        if blog_post is None: 
             result = llm.call(
                 f"""
-                주제 '{self.state.topic}'에 대한 좋은 SEO를 가지는 블로그 포스트를 작성해 주세요.
-                반드시 아래의 조사 자료를 바탕으로 작성해야 하며, 언어는 **한국어**입니다.
+            Make a blog post with SEO practices on the topic {self.state.topic} using the following research:
 
-                <research>
-                ================
-                {self.state.research}
-                ================
-                </research>
-                """
+            <research>
+            ================
+            {self.state.research}
+            ================
+            </research>
+            """
             )
-        else:
-            # [수정됨] 블로그 수정(Refine) 프롬프트 (한국어)
+        else: 
+            print("Remaking blog.")
             result = llm.call(
                 f"""
-                당신이 '{self.state.topic}'에 대해 작성한 블로그 글이 SEO 점수가 낮습니다.
-                
-                이유: {self.state.score.reason}
-                
-                위 내용을 반영하여 글을 개선해 주세요.
-                아래의 조사 자료를 다시 참고하고, 반드시 **한국어**로 작성하세요.
+            You wrote this blog post on {self.state.topic}, but it does not have a good SEO score because of {self.state.score.reason} 
+            
+            Improve it.
 
-                <blog post>
-                {self.state.blog_post.model_dump_json()}
-                </blog post>
+            <blog post>
+            {self.state.blog_post.model_dump_json()}
+            </blog post>
 
-                <research>
-                ================
-                {self.state.research}
-                ================
-                </research>
-                """
+            Use the following research.
+
+            <research>
+            ================
+            {self.state.research}
+            ================
+            </research>
+            """
             )
 
         self.state.blog_post = result
@@ -148,41 +145,37 @@ class ContentPipelineFlow(Flow[ContentPipelineState]):
         llm = LLM(model="openai/o4-mini", response_format=Tweet)
 
        
-        if tweet is None:
-            # [수정됨] 블로그 생성 프롬프트 (한국어)
+        if tweet is None: 
             result = llm.call(
                 f"""
-                주제 '{self.state.topic}'로 바이럴 될 만한 tweet을 작성해 주세요.
-                반드시 아래의 조사 자료를 바탕으로 작성해야 하며, 언어는 **한국어**입니다.
+            Make a tweet that can go viral on the topic {self.state.topic} using the following research:
 
-                <research>
-                ================
-                {self.state.research}
-                ================
-                </research>
-                """
+            <research>
+            ================
+            {self.state.research}
+            ================
+            </research>
+            """
             )
         else:
-            # [수정됨] 블로그 수정(Refine) 프롬프트 (한국어)
             result = llm.call(
                 f"""
-                당신이 '{self.state.topic}'에 대해 작성한 tweet이 SEO 점수가 낮습니다.
-                
-                이유: {self.state.score.reason}
-                
-                위 내용을 반영하여 글을 개선해 주세요.
-                아래의 조사 자료를 다시 참고하고, 반드시 **한국어**로 작성하세요.
+            You wrote this tweet on {self.state.topic}, but it does not have a good virality score because of {self.state.score.reason} 
+            
+            Improve it.
 
-                <tweet>
-                {self.state.tweet.model_dump_json()}
-                </tweet>
+            <tweet>
+            {self.state.tweet.model_dump_json()}
+            </tweet>
 
-                <research>
-                ================
-                {self.state.research}
-                ================
-                </research>
-                """
+            Use the following research.
+
+            <research>
+            ================
+            {self.state.research}
+            ================
+            </research>
+            """
             )
         self.state.tweet = result
 
@@ -195,41 +188,37 @@ class ContentPipelineFlow(Flow[ContentPipelineState]):
         llm = LLM(model="openai/o4-mini", response_format=LinkedInPost)
 
        
-        if linkedin_post is None:
-            # [수정됨] 블로그 생성 프롬프트 (한국어)
+        if linkedin_post is None: 
             result = llm.call(
                 f"""
-                주제 '{self.state.topic}' 로 바이럴 될 만한 linkedin post를 작성해  주세요.
-                반드시 아래의 조사 자료를 바탕으로 작성해야 하며, 언어는 **한국어**입니다.
+            Make a linkedin post that can go viral on the topic {self.state.topic} using the following research:
 
-                <research>
-                ================
-                {self.state.research}
-                ================
-                </research>
-                """
+            <research>
+            ================
+            {self.state.research}
+            ================
+            </research>
+            """
             )
         else:
-            # [수정됨] 블로그 수정(Refine) 프롬프트 (한국어)
             result = llm.call(
                 f"""
-                당신이 '{self.state.topic}'에 대해 작성한 linkedin post이 SEO 점수가 낮습니다.
-                
-                이유: {self.state.score.reason}
-                
-                위 내용을 반영하여 글을 개선해 주세요.
-                아래의 조사 자료를 다시 참고하고, 반드시 **한국어**로 작성하세요.
+            You wrote this linkedin post on {self.state.topic}, but it does not have a good virality score because of {self.state.score.reason} 
+            
+            Improve it.
 
-                <linkedin_post>
-                {self.state.linkedin_post.model_dump_json()}
-                </linkedin_post>
+            <linkedin_post>
+            {self.state.linkedin_post.model_dump_json()}
+            </linkedin_post>
 
-                <research>
-                ================
-                {self.state.research}
-                ================
-                </research>
-                """
+            Use the following research.
+
+            <research>
+            ================
+            {self.state.research}
+            ================
+            </research>
+            """
             )
         self.state.linkedin_post =result
 
@@ -277,7 +266,29 @@ class ContentPipelineFlow(Flow[ContentPipelineState]):
 
     @listen("check_passed")
     def finalize_content(self):
-        print("Finalizing content")
+        """Finalize the content"""
+        print("🎉 Finalizing content...")
+
+        if self.state.content_type == "blog":
+            print(f"📝 Blog Post: {self.state.blog_post.title}")
+            print(f"🔍 SEO Score: {self.state.score.score}/100")
+        elif self.state.content_type == "tweet":
+            print(f"🐦 Tweet: {self.state.tweet}")
+            print(f"🚀 Virality Score: {self.state.score.score}/100")
+        elif self.state.content_type == "linkedin":
+            print(f"💼 LinkedIn: {self.state.linkedin_post.title}")
+            print(f"🚀 Virality Score: {self.state.score.score}/100")
+
+        print("✅ Content ready for publication!")
+        return (
+            self.state.linkedin_post
+            if self.state.content_type == "linkedin"
+            else (
+                self.state.tweet
+                if self.state.content_type == "tweet"
+                else self.state.blog_post
+            )
+        )
 
 
 
@@ -287,7 +298,7 @@ flow = ContentPipelineFlow()
 flow.kickoff(
     inputs={
         "content_type" : "blog",
-        "topic" : "AI를 활용한 강아지 훈련법",
+        "topic": "AI Dog Training",
     }
 )
 
