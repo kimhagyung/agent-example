@@ -1,0 +1,174 @@
+{
+  "eval_set_id": "evalset880814",
+  "name": "evalset880814",
+  "eval_cases": [
+    {
+      "eval_id": "8월 도",
+      "conversation": [
+        {
+          "invocation_id": "e-6cb8f94a-6d1e-44bd-a6fd-32a69ffe794a",
+          "user_content": {
+            "parts": [
+              {
+                "text": "안"
+              }
+            ],
+            "role": "user"
+          },
+          "final_response": {
+            "parts": [
+              {
+                "text": "안녕하세요! 여행 관련 정보나 문의가 있으시면 언제든지 말씀해 주세요. 날씨, 환율, 명소 등 궁금한 점이 있으신가요?"
+              }
+            ],
+            "role": "model"
+          },
+          "intermediate_data": {},
+          "creation_timestamp": 1769596545.397898
+        },
+        {
+          "invocation_id": "e-fb441835-0c45-45f1-84dc-5cfd2043f0ee",
+          "user_content": {
+            "parts": [
+              {
+                "text": "나8월에 도쿄 가고싶어 "
+              }
+            ],
+            "role": "user"
+          },
+          "final_response": {
+            "parts": [
+              {
+                "text": "도쿄는 8월에 방문하기에 매력적인 도시입니다. 여름철인 8월의 도쿄는 덥고 습한 날씨가 일반적이므로, 시원한 옷차림과 충분한 수분 섭취가 필요합니다. 여행 계획을 도와드리기 위해 몇 가지 정보를 확인해 드릴까요? 예를 들어:\n\n1. 도쿄의 당시 날씨 정보\n2. 도쿄의 인기 명소 추천\n3. 만약 필요하시면 환율 정보 제공\n\n어떠한 정보가 필요하신지 알려주세요!"
+              }
+            ],
+            "role": "model"
+          },
+          "intermediate_data": {},
+          "creation_timestamp": 1769596553.763478
+        },
+        {
+          "invocation_id": "e-46f6e415-dd85-4323-b3b8-f5d0f720b8ad",
+          "user_content": {
+            "parts": [
+              {
+                "text": "ㅇ ㅡㅇ"
+              }
+            ],
+            "role": "user"
+          },
+          "final_response": {
+            "parts": [
+              {
+                "text": "도쿄 여행을 계획하고 계시다면 다음과 같은 정보를 참고해 보세요:\n\n### 날씨 정보:\n- 현재 온도: 22°C\n- 상태: 구름 많음\n- 습도: 65%\n- 풍속: 12 km/h\n- 예보: 구름이 간간이 끼는 온화한 날씨가 예상됩니다.\n\n### 인기 명소 추천:\n1. **시티 센터 (City Center)**\n   - 유형: 지역\n   - 등급: 4.2\n   - 설명: 도심 지역\n\n2. **역사 박물관 (Historical Museum)**\n   - 유형: 박물관\n   - 등급: 4.3\n   - 설명: 지역 역사와 문화를 탐방할 수 있는 곳\n\n3. **센트럴 파크 (Central Park)**\n   - 유형: 공원\n   - 등급: 4.1\n   - 설명: 주요 공원\n\n4. **올드 타운 (Old Town)**\n   - 유형: 구역\n   - 등급: 4.4\n   - 설명: 전통 건축물이 있는 역사적인 구역\n\n5. **로컬 마켓 (Local Market)**\n   - 유형: 시장\n   - 등급: 4.0\n   - 설명: 전통 현지 시장\n\n이 정보들이 여행 계획에 도움이 되셨길 바랍니다. 추가로 궁금한 점이 있으시면 언제든지 말씀해 주세요!"
+              }
+            ],
+            "role": "model"
+          },
+          "intermediate_data": {
+            "invocation_events": [
+              {
+                "author": "TravelAdvisorAgent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_call": {
+                        "id": "call_zbNE0CuWMaGAFMLnRoGOzpvV",
+                        "args": {
+                          "location": "Tokyo, Japan"
+                        },
+                        "name": "get_weather"
+                      }
+                    },
+                    {
+                      "function_call": {
+                        "id": "call_1Gi7Hgcbe5LqmEfuWYecYnSo",
+                        "args": {
+                          "location": "Tokyo, Japan"
+                        },
+                        "name": "get_local_attractions"
+                      }
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "TravelAdvisorAgent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_response": {
+                        "id": "call_zbNE0CuWMaGAFMLnRoGOzpvV",
+                        "name": "get_weather",
+                        "response": {
+                          "location": "Tokyo, Japan",
+                          "temperature": "22°C",
+                          "condition": "Partly cloudy",
+                          "humidity": "65%",
+                          "wind": "12 km/h",
+                          "forecast": "Mild weather with occasional clouds expected throughout the day"
+                        }
+                      }
+                    },
+                    {
+                      "function_response": {
+                        "id": "call_1Gi7Hgcbe5LqmEfuWYecYnSo",
+                        "name": "get_local_attractions",
+                        "response": {
+                          "location": "Tokyo, Japan",
+                          "category": "all",
+                          "attractions": [
+                            {
+                              "name": "City Center",
+                              "type": "area",
+                              "rating": 4.2,
+                              "description": "Main downtown area"
+                            },
+                            {
+                              "name": "Historical Museum",
+                              "type": "museum",
+                              "rating": 4.3,
+                              "description": "Local history and culture"
+                            },
+                            {
+                              "name": "Central Park",
+                              "type": "park",
+                              "rating": 4.1,
+                              "description": "Main public park"
+                            },
+                            {
+                              "name": "Old Town",
+                              "type": "district",
+                              "rating": 4.4,
+                              "description": "Historic district with traditional architecture"
+                            },
+                            {
+                              "name": "Local Market",
+                              "type": "market",
+                              "rating": 4.0,
+                              "description": "Traditional local marketplace"
+                            }
+                          ],
+                          "total_count": 5
+                        }
+                      }
+                    }
+                  ],
+                  "role": "user"
+                }
+              }
+            ]
+          },
+          "creation_timestamp": 1769596567.309502
+        }
+      ],
+      "session_input": {
+        "app_name": "email_refiner",
+        "user_id": "user"
+      },
+      "creation_timestamp": 1769596770.2040658
+    }
+  ],
+  "creation_timestamp": 1769596596.4609013
+}
