@@ -168,6 +168,661 @@
         "user_id": "user"
       },
       "creation_timestamp": 1769596770.2040658
+    },
+    {
+      "eval_id": "8월도쿄2",
+      "conversation": [
+        {
+          "invocation_id": "e-88b77f97-88aa-4a34-bb91-002dc9647770",
+          "user_content": {
+            "parts": [
+              {
+                "text": "안녕"
+              }
+            ],
+            "role": "user"
+          },
+          "final_response": {
+            "parts": [
+              {
+                "text": "안녕하세요! 여행 관련 질문이 있으신가요? 질문해 주시면 도와드리겠습니다."
+              }
+            ],
+            "role": "model"
+          },
+          "intermediate_data": {},
+          "creation_timestamp": 1769851259.190066
+        },
+        {
+          "invocation_id": "e-d53c6171-6052-4275-a554-281cef8da12d",
+          "user_content": {
+            "parts": [
+              {
+                "text": "나 8월에 도쿄가가고싶어"
+              }
+            ],
+            "role": "user"
+          },
+          "final_response": {
+            "parts": [
+              {
+                "text": "도쿄 여행 계획을 세우는 것은 훌륭한 선택입니다! 여행을 위해 고려해야 할 몇 가지 사항들이 있는데요:\n\n1. **날씨**: 8월의 도쿄는 여름이므로 덥고 습할 수 있습니다. 현재 날씨 정보를 확인해 드릴까요?\n\n2. **현지 명소**: 도쿄에는 많은 명소들이 있습니다. 선호하는 카테고리, 예컨대 역사적인 장소, 현대적인 명소, 전통 문화 등을 추천해드릴 수 있습니다.\n\n3. **환전**: 일본 엔화(JPY)로의 환전이 필요할 수 있습니다. 현재 환율 정보를 제공해드릴까요?\n\n어떤 정보가 필요하신지 말씀해 주시면 도움이 될 수 있도록 하겠습니다."
+              }
+            ],
+            "role": "model"
+          },
+          "intermediate_data": {},
+          "creation_timestamp": 1769851262.932525
+        },
+        {
+          "invocation_id": "e-2dd5eb20-4e35-47ce-af45-2a44204d7162",
+          "user_content": {
+            "parts": [
+              {
+                "text": "응 "
+              }
+            ],
+            "role": "user"
+          },
+          "final_response": {
+            "parts": [
+              {
+                "text": "도쿄 여행에 대한 정보를 다음과 같이 준비했습니다:\n\n### 현재 도쿄 날씨\n- **온도**: 22°C\n- **날씨 상태**: 부분적으로 구름이 끼어 있음\n- **습도**: 65%\n- **바람**: 시속 12km\n- **예보**: 대체로 온화한 날씨가 예상되며, 간혹 구름이 낄 수 있습니다.\n\n8월에는 더 따뜻하고 습도가 높을 수 있으니 가벼운 여름 옷과 함께 우산을 챙기는 것도 좋습니다.\n\n### 도쿄의 주요 명소\n1. **도쿄 타워**\n   - 유형: 랜드마크\n   - 평점: 4.5\n   - 설명: 통신 및 전망 타워\n\n2. **센소지**\n   - 유형: 절\n   - 평점: 4.6\n   - 설명: 고대 불교 사찰\n\n3. **시부야 스크램블 교차로**\n   - 유형: 랜드마크\n   - 평점: 4.4\n   - 설명: 가장 바쁜 보행자 교차로\n\n4. **메이지 신궁**\n   - 유형: 신사\n   - 평점: 4.7\n   - 설명: 메이지 천황에게 헌정된 신도 신사\n\n5. **도쿄 스카이트리**\n   - 유형: 타워\n   - 평점: 4.6\n   - 설명: 방송 및 전망 타워\n\n### 환전 정보\n- **KRW 10,000**은 현재 **JPY 10,000**로 환전됩니다.\n- 현재 환율은 1:1입니다.\n\n이러한 정보를 바탕으로 도쿄 여행을 계획하실 때 도움이 되었으면 좋겠습니다! 추가로 필요한 정보가 있으면 언제든지 말씀해 주세요."
+              }
+            ],
+            "role": "model"
+          },
+          "intermediate_data": {
+            "invocation_events": [
+              {
+                "author": "TravelAdvisorAgent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_call": {
+                        "id": "call_8dteDaKebEMkbo6SkWC0aajJ",
+                        "args": {
+                          "location": "Tokyo"
+                        },
+                        "name": "get_weather"
+                      }
+                    },
+                    {
+                      "function_call": {
+                        "id": "call_D5YcvtxCe61jgq26ZpjjagDa",
+                        "args": {
+                          "location": "Tokyo"
+                        },
+                        "name": "get_local_attractions"
+                      }
+                    },
+                    {
+                      "function_call": {
+                        "id": "call_WOtIPElyDbWTSP05ml0GrpPC",
+                        "args": {
+                          "from_currency": "KRW",
+                          "to_currency": "JPY",
+                          "amount": 10000
+                        },
+                        "name": "get_exchange_rate"
+                      }
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "TravelAdvisorAgent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_response": {
+                        "id": "call_8dteDaKebEMkbo6SkWC0aajJ",
+                        "name": "get_weather",
+                        "response": {
+                          "location": "Tokyo",
+                          "temperature": "22°C",
+                          "condition": "Partly cloudy",
+                          "humidity": "65%",
+                          "wind": "12 km/h",
+                          "forecast": "Mild weather with occasional clouds expected throughout the day"
+                        }
+                      }
+                    },
+                    {
+                      "function_response": {
+                        "id": "call_D5YcvtxCe61jgq26ZpjjagDa",
+                        "name": "get_local_attractions",
+                        "response": {
+                          "location": "Tokyo",
+                          "category": "all",
+                          "attractions": [
+                            {
+                              "name": "Tokyo Tower",
+                              "type": "landmark",
+                              "rating": 4.5,
+                              "description": "Communications and observation tower"
+                            },
+                            {
+                              "name": "Senso-ji",
+                              "type": "temple",
+                              "rating": 4.6,
+                              "description": "Ancient Buddhist temple"
+                            },
+                            {
+                              "name": "Shibuya Crossing",
+                              "type": "landmark",
+                              "rating": 4.4,
+                              "description": "Busiest pedestrian crossing"
+                            },
+                            {
+                              "name": "Meiji Shrine",
+                              "type": "shrine",
+                              "rating": 4.7,
+                              "description": "Shinto shrine dedicated to Emperor Meiji"
+                            },
+                            {
+                              "name": "Tokyo Skytree",
+                              "type": "tower",
+                              "rating": 4.6,
+                              "description": "Broadcasting and observation tower"
+                            }
+                          ],
+                          "total_count": 5
+                        }
+                      }
+                    },
+                    {
+                      "function_response": {
+                        "id": "call_WOtIPElyDbWTSP05ml0GrpPC",
+                        "name": "get_exchange_rate",
+                        "response": {
+                          "from_currency": "KRW",
+                          "to_currency": "JPY",
+                          "amount": 10000,
+                          "exchange_rate": 1.0,
+                          "converted_amount": 10000.0,
+                          "timestamp": "2024-03-15 10:30:00 UTC"
+                        }
+                      }
+                    }
+                  ],
+                  "role": "user"
+                }
+              }
+            ]
+          },
+          "creation_timestamp": 1769851266.956038
+        }
+      ],
+      "session_input": {
+        "app_name": "email_refiner",
+        "user_id": "user"
+      },
+      "creation_timestamp": 1769851294.1490698
+    },
+    {
+      "eval_id": "paris.Sept.OneByone",
+      "conversation": [
+        {
+          "invocation_id": "e-eab4dead-36bc-4e0a-b68a-ad91c359fd08",
+          "user_content": {
+            "parts": [
+              {
+                "text": "안녕"
+              }
+            ],
+            "role": "user"
+          },
+          "final_response": {
+            "parts": [
+              {
+                "text": "안녕하세요! 여행 계획이나 특정 장소에 대한 정보가 필요하신가요? 날씨, 환율, 관광 명소 등에 대한 도움이 필요하시면 언제든 말씀해 주세요."
+              }
+            ],
+            "role": "model"
+          },
+          "intermediate_data": {},
+          "creation_timestamp": 1769855347.866603
+        },
+        {
+          "invocation_id": "e-53e23a66-62e5-4ecb-8623-f9d4c220b3e9",
+          "user_content": {
+            "parts": [
+              {
+                "text": "9월의 파리 날씨는 어때 ?"
+              }
+            ],
+            "role": "user"
+          },
+          "final_response": {
+            "parts": [
+              {
+                "text": "9월의 파리 날씨는 일반적으로 온화하고 쾌적합니다. 평균 기온은 대체로 13°C에서 21°C 사이며, 가을이 시작됨에 따라 기온이 조금씩 낮아지기 시작합니다. 가끔씩 비가 올 수 있으니 우산이나 가벼운 우비를 준비하시는 것이 좋습니다.\n\n더 정확한 정보를 원하시면, 현재 파리의 날씨 정보를 제공해 드릴 수 있습니다."
+              }
+            ],
+            "role": "model"
+          },
+          "intermediate_data": {},
+          "creation_timestamp": 1769855358.256042
+        },
+        {
+          "invocation_id": "e-459cb1a7-a834-442e-9167-34d2c902ce28",
+          "user_content": {
+            "parts": [
+              {
+                "text": "환율은 어때 ?"
+              }
+            ],
+            "role": "user"
+          },
+          "final_response": {
+            "parts": [
+              {
+                "text": "어떤 통화에서 유로화(EUR)로 환전하고 싶으신가요? 알려주시면 현재 환율 정보를 제공해 드리겠습니다."
+              }
+            ],
+            "role": "model"
+          },
+          "intermediate_data": {},
+          "creation_timestamp": 1769855375.357376
+        },
+        {
+          "invocation_id": "e-45d9a619-0eb6-4829-afa6-5e647277739f",
+          "user_content": {
+            "parts": [
+              {
+                "text": "응 맞아 "
+              }
+            ],
+            "role": "user"
+          },
+          "final_response": {
+            "parts": [
+              {
+                "text": "어떤 통화에서 유로화로 환전하려고 하는지 정확히 알고 싶습니다. 예를 들어, 미국 달러(USD)나 일본 엔(JPY) 등의 구체적인 통화를 말씀해 주시면, 환율 정보를 제공해 드리겠습니다."
+              }
+            ],
+            "role": "model"
+          },
+          "intermediate_data": {},
+          "creation_timestamp": 1769855439.703242
+        },
+        {
+          "invocation_id": "e-c753cc1d-3695-463e-b82c-0d18882fba2f",
+          "user_content": {
+            "parts": [
+              {
+                "text": "미국달러야 "
+              }
+            ],
+            "role": "user"
+          },
+          "final_response": {
+            "parts": [
+              {
+                "text": "현재 미국 달러(USD)에서 유로(EUR)로의 환율은 약 0.92입니다. 즉, 1 미국 달러는 약 0.92 유로로 환전됩니다.\n\n추가로 필요한 정보나 도움이 필요하시다면 말씀해 주세요!"
+              }
+            ],
+            "role": "model"
+          },
+          "intermediate_data": {
+            "invocation_events": [
+              {
+                "author": "TravelAdvisorAgent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_call": {
+                        "id": "call_lOkHql8G5u99mABMugIEikhz",
+                        "args": {
+                          "from_currency": "USD",
+                          "to_currency": "EUR",
+                          "amount": 1
+                        },
+                        "name": "get_exchange_rate"
+                      }
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "TravelAdvisorAgent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_response": {
+                        "id": "call_lOkHql8G5u99mABMugIEikhz",
+                        "name": "get_exchange_rate",
+                        "response": {
+                          "from_currency": "USD",
+                          "to_currency": "EUR",
+                          "amount": 1,
+                          "exchange_rate": 0.92,
+                          "converted_amount": 0.92,
+                          "timestamp": "2024-03-15 10:30:00 UTC"
+                        }
+                      }
+                    }
+                  ],
+                  "role": "user"
+                }
+              }
+            ]
+          },
+          "creation_timestamp": 1769855445.707988
+        },
+        {
+          "invocation_id": "e-2d3eaf56-da26-46f3-ae1b-d2cd5ba11060",
+          "user_content": {
+            "parts": [
+              {
+                "text": "마지막으로 랜드마크에 대해서서 물어보자 "
+              }
+            ],
+            "role": "user"
+          },
+          "final_response": {
+            "parts": [
+              {
+                "text": "죄송합니다만, 현재 파리의 랜드마크에 대한 정보를 가져오는 데 문제가 발생했습니다. 그러나 일반적으로 파리에서는 다음과 같은 유명한 랜드마크들이 있습니다:\n\n1. **에펠탑 (Eiffel Tower)** - 파리의 상징적인 건축물로, 도시 전경을 한눈에 볼 수 있는 추천 명소입니다.\n2. **루브르 박물관 (Louvre Museum)** - 세계에서 가장 큰 박물관 중 하나로, 여러 유명한 예술 작품들이 전시되어 있습니다.\n3. **노트르담 대성당 (Notre-Dame Cathedral)** - 고딕 건축의 아름다움을 느낄 수 있는 역사적인 성당입니다.\n4. **몽마르트르 언덕과 사크레쾨르 바실리카(Sacré-Cœur Basilica)** - 언덕 위에서 파리 전경을 감상할 수 있는 곳입니다.\n5. **샹젤리제 거리와 개선문 (Champs-Élysées and Arc de Triomphe)** - 화려한 거리와 역사적인 개선문이 있어 많은 관광객들이 찾는 곳입니다.\n\n파리를 방문하신다면 이러한 명소들을 고려해 보세요! 추가적인 정보나 질문이 있다면 언제든지 말씀해 주세요."
+              }
+            ],
+            "role": "model"
+          },
+          "intermediate_data": {
+            "invocation_events": [
+              {
+                "author": "TravelAdvisorAgent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_call": {
+                        "id": "call_Q4IUXKasd0UddyTWn0agHEPJ",
+                        "args": {
+                          "location": "Paris",
+                          "category": "landmarks"
+                        },
+                        "name": "get_local_attractions"
+                      }
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "TravelAdvisorAgent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_response": {
+                        "id": "call_Q4IUXKasd0UddyTWn0agHEPJ",
+                        "name": "get_local_attractions",
+                        "response": {
+                          "location": "Paris",
+                          "category": "landmarks",
+                          "attractions": [],
+                          "total_count": 0
+                        }
+                      }
+                    }
+                  ],
+                  "role": "user"
+                }
+              }
+            ]
+          },
+          "creation_timestamp": 1769855472.717601
+        }
+      ],
+      "session_input": {
+        "app_name": "email_refiner",
+        "user_id": "user"
+      },
+      "creation_timestamp": 1769855510.766326
+    },
+    {
+      "eval_id": "서울,현재,onebyone",
+      "conversation": [
+        {
+          "invocation_id": "e-ef2b8362-c5a7-4677-92b4-66aa245710f0",
+          "user_content": {
+            "parts": [
+              {
+                "text": "안녕 "
+              }
+            ],
+            "role": "user"
+          },
+          "final_response": {
+            "parts": [
+              {
+                "text": "안녕하세요! 여행이나 특정 장소에 대해 궁금한 점이 있나요? 날씨, 환율, 관광지 정보 등과 관련된 질문이 있다면 도와드릴 수 있습니다. 어떤 도움을 드릴까요?"
+              }
+            ],
+            "role": "model"
+          },
+          "intermediate_data": {},
+          "creation_timestamp": 1769855571.409988
+        },
+        {
+          "invocation_id": "e-455fdf5b-5ebc-4a33-8c6f-f198c8242056",
+          "user_content": {
+            "parts": [
+              {
+                "text": "2월의 파리 날씨는 어때 ?"
+              }
+            ],
+            "role": "user"
+          },
+          "final_response": {
+            "parts": [
+              {
+                "text": "2월의 파리 날씨는 대체로 쌀쌀한 편입니다. 평균 기온은 약 3°C에서 8°C 정도이며, 비가 올 확률도 있습니다. 바람이 불어 체감 온도가 더 낮게 느껴질 수 있으니 따뜻한 옷을 준비하는 것이 좋습니다. \n\n정확한 날씨 정보가 필요하시면 현재 날씨 정보를 조회해 드릴 수도 있습니다. 더 궁금한 사항이 있나요?"
+              }
+            ],
+            "role": "model"
+          },
+          "intermediate_data": {},
+          "creation_timestamp": 1769855577.684098
+        },
+        {
+          "invocation_id": "e-13465105-0a4b-4d90-8b6f-ea4ef76d6ccc",
+          "user_content": {
+            "parts": [
+              {
+                "text": "그럼 서울 날씨는 어때 ?"
+              }
+            ],
+            "role": "user"
+          },
+          "final_response": {
+            "parts": [
+              {
+                "text": "서울의 현재 날씨는 약 22°C로, 부분적으로 구름이 낀 상태입니다. 습도는 65%이며 바람은 시속 12km로 불고 있습니다. 오늘 하루는 가끔 구름이 낀 온화한 날씨가 예상됩니다.\n\n더 궁금한 사항이 있거나 다른 여행 관련 정보가 필요하시면 말씀해 주세요!"
+              }
+            ],
+            "role": "model"
+          },
+          "intermediate_data": {
+            "invocation_events": [
+              {
+                "author": "TravelAdvisorAgent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_call": {
+                        "id": "call_4SCoTxVkV9F5MqJi0MID3hZ5",
+                        "args": {
+                          "location": "서울"
+                        },
+                        "name": "get_weather"
+                      }
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "TravelAdvisorAgent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_response": {
+                        "id": "call_4SCoTxVkV9F5MqJi0MID3hZ5",
+                        "name": "get_weather",
+                        "response": {
+                          "location": "서울",
+                          "temperature": "22°C",
+                          "condition": "Partly cloudy",
+                          "humidity": "65%",
+                          "wind": "12 km/h",
+                          "forecast": "Mild weather with occasional clouds expected throughout the day"
+                        }
+                      }
+                    }
+                  ],
+                  "role": "user"
+                }
+              }
+            ]
+          },
+          "creation_timestamp": 1769855594.596594
+        },
+        {
+          "invocation_id": "e-bf777baf-a4b5-406f-b79c-6413c80db8a4",
+          "user_content": {
+            "parts": [
+              {
+                "text": "믹구 환율은?"
+              }
+            ],
+            "role": "user"
+          },
+          "final_response": {
+            "parts": [
+              {
+                "text": "현재 1 한국 원화(KRW)는 약 0.00075 미국 달러(USD)에 해당합니다. 환율은 실시간으로 변동하므로 여행 전에 환율을 다시 확인하시는 것이 좋습니다.\n\n다른 여행 관련 질문이나 도움이 필요하시면 언제든지 말씀해 주세요!"
+              }
+            ],
+            "role": "model"
+          },
+          "intermediate_data": {
+            "invocation_events": [
+              {
+                "author": "TravelAdvisorAgent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_call": {
+                        "id": "call_0Bcv77Q1IgoixvmbVA15Qxsx",
+                        "args": {
+                          "from_currency": "KRW",
+                          "to_currency": "USD",
+                          "amount": 1
+                        },
+                        "name": "get_exchange_rate"
+                      }
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "TravelAdvisorAgent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_response": {
+                        "id": "call_0Bcv77Q1IgoixvmbVA15Qxsx",
+                        "name": "get_exchange_rate",
+                        "response": {
+                          "from_currency": "KRW",
+                          "to_currency": "USD",
+                          "amount": 1,
+                          "exchange_rate": 0.00075,
+                          "converted_amount": 0.00075,
+                          "timestamp": "2024-03-15 10:30:00 UTC"
+                        }
+                      }
+                    }
+                  ],
+                  "role": "user"
+                }
+              }
+            ]
+          },
+          "creation_timestamp": 1769855601.976177
+        },
+        {
+          "invocation_id": "e-309163dd-a2e4-4ae4-a7ca-496fee1d4d77",
+          "user_content": {
+            "parts": [
+              {
+                "text": "마지막으로 랜드마크는?"
+              }
+            ],
+            "role": "user"
+          },
+          "final_response": {
+            "parts": [
+              {
+                "text": "서울에는 다양한 랜드마크가 있지만, 특정한 목록을 제시할 수 없다는 점에서 아쉽습니다. 그래도 서울에서 꼭 방문할 만한 랜드마크를 몇 가지 소개해드리겠습니다:\n\n1. **경복궁**: 조선 시대의 주요 궁궐로, 한국 역사와 전통 문화를 체험할 수 있는 중요한 장소입니다.\n\n2. **남산 서울타워**: 서울의 멋진 전망을 즐길 수 있는 타워로, 특히 야경이 아름답습니다.\n\n3. **북촌 한옥마을**: 전통 한옥을 잘 보존한 지역으로, 한국 전통 가옥의 아름다움을 느낄 수 있습니다.\n\n4. **잠실 롯데월드타워**: 세계에서 가장 높은 건물 중 하나로, 전망대에서 서울 시내를 한눈에 조망할 수 있습니다.\n\n5. **덕수궁**: 서울 시내에 위치한 궁궐로, 조선 후기와 대한제국 시기의 건축양식을 감상할 수 있습니다.\n\n서울을 방문하신다면 이러한 랜드마크를 놓치지 마세요! 다른 도움이 필요하시면 말씀해 주세요."
+              }
+            ],
+            "role": "model"
+          },
+          "intermediate_data": {
+            "invocation_events": [
+              {
+                "author": "TravelAdvisorAgent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_call": {
+                        "id": "call_ZT0DfvHeh6iSjNjsNTn78fM6",
+                        "args": {
+                          "location": "서울",
+                          "category": "landmarks"
+                        },
+                        "name": "get_local_attractions"
+                      }
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "TravelAdvisorAgent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_response": {
+                        "id": "call_ZT0DfvHeh6iSjNjsNTn78fM6",
+                        "name": "get_local_attractions",
+                        "response": {
+                          "location": "서울",
+                          "category": "landmarks",
+                          "attractions": [],
+                          "total_count": 0
+                        }
+                      }
+                    }
+                  ],
+                  "role": "user"
+                }
+              }
+            ]
+          },
+          "creation_timestamp": 1769855621.280844
+        }
+      ],
+      "session_input": {
+        "app_name": "email_refiner",
+        "user_id": "user"
+      },
+      "creation_timestamp": 1769855641.356643
     }
   ],
   "creation_timestamp": 1769596596.4609013
