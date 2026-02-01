@@ -185,4 +185,5 @@ travel_advisor_agent = Agent(
     model=MODEL,
 )
 
-root_agent = travel_advisor_agent
+# root_agent = travel_advisor_agent # adk cli, adk 웹 adk api 서버를 쓸 때만 필요함 (cli가 자동으로 root agent를 찾으려고 하기 떄문)
+# 하지만 이번에는 우리가 직접 이걸 실행할거라 필요없어 삭세 
