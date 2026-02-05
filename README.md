@@ -6,22 +6,19 @@
 
 ### **[목표]**
 
-* **프로덕션용 Agent 구축:** 개발용 Web UI를 벗어나 실제 서비스 환경에서 실행되는 Agent 개발.
-* **성능 평가:** ADK 내장 기능을 활용한 에이전트 성능 검증 방법 습득.
-* **API 연동:** 자동 생성된 API 서버를 활용하여 커스텀 프론트엔드와 에이전트 연결.
+* **프로덕션용 Agent 구축:** 개발 전용 UI가 아닌 실제 서비스 환경에서 동작하는 Agent 개발.
+* **성능 평가:** ADK 내장 기능을 사용해 에이전트의 답변 품질과 도구 사용 순서 검증.
+* **API 연동:** 직접 만든 프론트엔드에서 API를 통해 에이전트를 실행하고 스트리밍 업데이트 확인.
 
 ### **[Agent 평가 방법]**
 
-* LLM 특성상 입력 대비 출력이 유동적이므로, 기존 소프트웨어 테스트와는 다른 방식이 필요함.
-
-1. **Tool Trajectory (도구 실행 경로) 테스트**
+* **Tool Trajectory (도구 실행 경로) 테스트**
 * **핵심:** 에이전트가 도구를 호출하는 '순서'와 '과정'을 검증.
-* **용도:** 특정 지침(Instruction)에 따라 도구 A 다음 도구 B를 반드시 호출해야 하는 시나리오에서 유용함.
+* **용도:** "A 도구 실행 후 반드시 B 도구를 호출해야 한다"는 로직이 있을 때 유용.
 
 
-2. **최종 응답 (Final Response) 테스트**
-* **핵심:** 중간 과정보다는 사용자에게 전달되는 '결과값'의 정확도를 검증.
-* **용도:** 도구 사용 순서와 상관없이 최종 답변의 품질이 중요할 때 사용.
+* **최종 응답 (Final Response) 테스트**
+* **핵심:** 도구 사용 과정과 관계없이 사용자에게 전달되는 '최종 결과'의 정확도만 확인.
 
 
 
@@ -29,33 +26,31 @@
 
 1. **라이브러리 설치:** `uv add requests`
 2. **서버 실행:** `adk api_server`
-3. **Swagger UI 확인:** `http://127.0.0.1:8000/docs`
-* **주의:** 접속 오류 발생 시 Python 버전을 **3.13 미만**으로 낮추는 것을 권장.
+3. **Swagger UI 확인:** [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+* **참고:** 접속 오류 시 Python 버전을 3.13 미만으로 낮추는 것을 추천함. (이슈 관련 링크: [https://github.com/google/adk-python/issues/3173](https://github.com/google/adk-python/issues/3173))
 
 
 
 ### **[Invocation Flow]**
 
-> [ADK Invocation Flow Diagram](https://google.github.io/adk-docs/assets/invocation-flow.png)
+* **다이어그램 링크:** [https://google.github.io/adk-docs/assets/invocation-flow.png](https://google.github.io/adk-docs/assets/invocation-flow.png)
 
 ### **[Vertex AI Agent Engine 배포]**
 
-> [Deployment Guide](https://google.github.io/adk-docs/deploy/agent-engine/)
+* **가이드 링크:** [https://google.github.io/adk-docs/deploy/agent-engine/](https://google.github.io/adk-docs/deploy/agent-engine/)
+* **개념:** Google Cloud의 완전 관리형 서비스를 활용해 프로덕션급 에이전트를 배포 및 확장.
 
-* **개념:** Google Cloud에서 제공하는 AI Agent 전용 완전 관리형 배포 서비스.
-* **특징:** 프로덕션 환경에서 에이전트 관리 및 확장성 확보 가능.
+**[사전 준비 단계]**
 
-**[사전 준비]**
+1. **Google Cloud CLI 설치:** [https://docs.cloud.google.com/sdk/docs/install-sdk#windows](https://docs.cloud.google.com/sdk/docs/install-sdk#windows)
+2. **인증:** 설치 후 콘솔 창에서 구글 계정 인증 진행.
+3. **버킷 생성:** [https://console.cloud.google.com/storage/browser](https://console.cloud.google.com/storage/browser) (결과물 저장용)
+4. **API 활성화:** [https://console.cloud.google.com/flows/enableapi?apiid=aiplatform.googleapis.com](https://console.cloud.google.com/flows/enableapi?apiid=aiplatform.googleapis.com)
 
-1. [Google Cloud CLI](https://docs.cloud.google.com/sdk/docs/install-sdk#windows) 설치 및 인증.
-2. [GCS 버킷 생성](https://console.cloud.google.com/storage/browser).
-3. 가상환경 라이브러리 추가: `uv add "google-cloud-aiplatform[adk,agent_engines]" cloudpickle`
-4. [AI Platform API](https://console.cloud.google.com/flows/enableapi?apiid=aiplatform.googleapis.com) 활성화.
-
-**[배포 실행]**
+**[배포 실행 명령]**
 
 ```bash
-# 구글 권한 인증 및 프로젝트 설정
+# 프로젝트 권한 설정 및 로그인
 gcloud auth application-default login --project [project-id]
 gcloud config set project [project-id]
 
@@ -70,3 +65,4 @@ uv run deploy.py
 * `pip install aiosqlite`
 * `uv add "google-cloud-aiplatform[adk,agent_engines]"`
 * `uv add cloudpickle`
+ 
