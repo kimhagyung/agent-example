@@ -1,4 +1,4 @@
-# ## AI Agents # 13. Introducing LangGraph, #14 LangGraph Agents
+# ## AI Agents #15 LangGraph Youtube Thumbnail Maker Agent
 
 ### **[.env 환경 파일 구성]**
 
@@ -10,3 +10,4 @@
 
  크게 설명할 게 없어 패스 .. 
  
+
