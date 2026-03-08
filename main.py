@@ -61,8 +61,8 @@ graph_builder.add_edge("draft_response", END)
 
 graph = graph_builder.compile()
 
-# 테스트 
-#result = graph.invoke({"email" : "i need to talk to you urgently"})
-result = graph.invoke({"email" : "i have an offer for you"})
+# # 테스트 
+# #result = graph.invoke({"email" : "i need to talk to you urgently"})
+# result = graph.invoke({"email" : "i have an offer for you"})
 
-print(result)
+# print(result)
