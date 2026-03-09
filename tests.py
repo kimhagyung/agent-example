@@ -13,9 +13,59 @@ from main import graph
     ]
 )
 def test_full_graph(email, expected_category, expected_score):
-    result = graph.invoke({"email"  : email})
+    result = graph.invoke({"email"  : email}, config={"configurable" : {"thread_id" : "1"}})
 
     # assert : 조건을 쓸 수 있게 해주는 파이썬 키워드, 만약조건이 참이 아니면 assert가 일종의 에러를 만든다. (이게다임)
     # 아래는 우리가 기대하는 것들이 맞는지 assert(확인) 하고있는 것 
     assert result["category"] == expected_category
-    assert result["priority_score"] ==  expected_score 
+    assert result["priority_score"] ==  expected_score
+
+# 노드가 필요로 했던 state와 함께 node를 invoke함으로써 노드를 각각 따로따로 테스트한다.  
+def test_individual_nodes():
+    # categorize_email
+    result = graph.nodes["categorize_email"].invoke( # 특정 노드만 invoke
+        {"email" : "check out this offer."}
+    )
+
+    assert result["category"] == "spam" # categorize_email
+
+    # assing_priority    
+    result = graph.nodes["assing_priority"].invoke( # 특정 노드만 invoke
+        {"category" : "spam"}
+    )
+
+    assert result["priority_score"] == 1
+    
+    # draft_response    
+    result = graph.nodes["draft_response"].invoke( # 특정 노드만 invoke
+        {"category" : "spam"}
+    )
+
+    assert "Go away!" in result["response"]  
+
+# 부분 노드 실행 
+def test_partial_execution():
+    graph.update_state(
+        config = {
+            "configurable" :{
+                "thread_id" : "1",
+            }, 
+        },
+        values={ # 업데이트 하고 싶은 value
+            "email" : "please check out this offer.",
+            "category" : "spam"
+        },
+        as_node= "categorize_email" ,# 마치 노드처럼 , categorize_email 노드인척 
+    )
+
+    result = graph.invoke(
+        None, 
+        config = {
+            "configurable" :{
+                "thread_id" : "1",
+            }, 
+        },
+        interrupt_after=  ""  # 원하는 지점에서 중담(intterup_before도 있음 )
+    )
+
+    assert result["priority_score"] == 1
