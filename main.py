@@ -17,7 +17,7 @@ class EmailState(TypedDict):
     response : str
 
 class EmailClassificationOutput(BaseModel):
-    category : Literal["spam","n   ormal","urgent"] = Field(
+    category : Literal["spam","normal","urgent"] = Field(
         description="Category of the email"  
     ) # filed를 설명하면 그 description들이 ai model로 전달(ai모델이 더 명확하게 만들어줌줌)
 
