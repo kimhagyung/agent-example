@@ -12,16 +12,17 @@ def transfer_to_agent(agent_name : str):
     Transfer to the given agent 
 
     Args :   
-        agent_name : Name of the agent to transfer to, one of: quiz_agent, teacher_agnet or 
+        agent_name : Name of the agent to transfer to, one of:  teacher_agnet or 
         'feynman_agent'  
     """ # 이 tool은 이 중 하나의 에이전트로 전환된다.  
 
-    return f"Transfer to {agent_name} completed." # 분류에이전트ㅡ 전환 발생 콘솔 기록 (분류 함수 테스트)
-
-    # return Command(
-    #     goto=agent_name, 
-    #     graph=Command.PARENT
-    # )
+    return Command(
+        goto=agent_name, 
+        graph=Command.PARENT,
+        update = { # state값 update, 
+            'current_agent' : agent_name, # 만약 current_agent값이 state에 있으면 그건 전환했다는 뜻 
+        }
+    )
 
 @tool
 def web_search_tool(query: str):
