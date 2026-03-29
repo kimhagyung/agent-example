@@ -5,6 +5,7 @@ from langgraph.graph import START, END, StateGraph, MessagesState
 from agent.classification_agent import classification_agent
 from agent.teacher_agent import teacher_agent
 from agent.feynman_agent import feynman_agent
+from agent.quiz_agent import quiz_agent
 
 class TutorState(MessagesState):
     current_agent : str # 다른 에이전트로 전환될떄마다, 그걸 state에 저장하는 용도임. 
@@ -26,6 +27,7 @@ graph_builder.add_node(
     )
 graph_builder.add_node("teacher_agent", teacher_agent )
 graph_builder.add_node("feynman_agent", feynman_agent )
+graph_builder.add_node("quiz_agent", quiz_agent )
 
 graph_builder.add_conditional_edges(
     START,
