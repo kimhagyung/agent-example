@@ -1,6 +1,6 @@
 from langgraph.prebuilt import create_react_agent
 from tools.shared_tools import transfer_to_agent, web_search_tool
-from tools.quiz_tools import generage_quiz
+from tools.quiz_tools import generate_quiz
 
 quiz_agent = create_react_agent(
     model="openai:gpt-4o",
@@ -76,7 +76,7 @@ quiz_agent = create_react_agent(
     Remember: Always research → ask length → gene rate quiz → present one by one → provide detailed feedback!
     """,
     tools = [
-        generage_quiz,
+        generate_quiz,
         transfer_to_agent,
         web_search_tool
     ]
