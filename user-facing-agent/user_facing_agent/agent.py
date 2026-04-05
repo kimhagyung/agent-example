@@ -8,10 +8,16 @@ from google.adk.agents.remote_a2a_agent import (
     AGENT_CARD_WELL_KNOWN_PATH
 )
 
-history_agent = RemoteA2aAgent(
+philosophy_agent = RemoteA2aAgent(
     name ="HistoryHelperAgent",
     description="An agent that can help  students with history homework", 
     agent_card = f"http://127.0.0.1:8001/{AGENT_CARD_WELL_KNOWN_PATH}" # agent card의 url 정해야함 
+)
+
+history_agent = RemoteA2aAgent(
+    name ="PhilosophyHelperAgent",
+    description="An agent that can help  students with Philosophy homework", 
+    agent_card = f"http://127.0.0.1:8002/{AGENT_CARD_WELL_KNOWN_PATH}" # agent card의 url 정해야함 
 )
 
 root_agent = Agent(
