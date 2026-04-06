@@ -1,6 +1,29 @@
-def main():
-    print("Hello from ai-agents-masterclass!")
+from dotenv import load_dotenv
+load_dotenv()
 
+from fastapi import FastAPI
+from openai import AsyncOpenAI 
+from pydantic import BaseModel
 
-if __name__ == "__main__":
-    main()
+from agents import Agent, Runner
+agent = Agent(name="Assistant", instructions="You help users with their questions.")
+ 
+# print(result.final_output)
+ 
+app = FastAPI()
+
+client = AsyncOpenAI()
+
+class CreateConversationResponse(BaseModel):
+    conversation_id : str
+
+@app.post("/conversations")
+async def create_conversation() -> CreateConversationResponse:
+    conversation = await client.conversations.create()
+    return {
+        "conversation_id" : conversation.id,
+    }
+
+@app.post("/conversations/{conversation_id}/message")
+async def create_message(conversation_id : str):
+    pass 

@@ -1,0 +1,10 @@
+POST http://127.0.0.1:8000/conversations
+
+###
+
+POST http://127.0.0.1:8000/conversations/conv_69d3ac149fd88194bf22b561d5d707b80852bdef060e0e3e/message
+Content-Type: application/json
+
+{
+    "question": "What is the first question i asked you?"
+}
