@@ -24,6 +24,19 @@ async def create_conversation() -> CreateConversationResponse:
         "conversation_id" : conversation.id,
     }
 
+class CreateMessageInput(BaseModel):
+    question: str
+
+class CreateMessageOutput(BaseModel):
+    answer : str 
+
 @app.post("/conversations/{conversation_id}/message")
-async def create_message(conversation_id : str):
-    pass 
+async def create_message(conversation_id : str, message_input : CreateMessageInput) -> CreateMessageOutput:
+    answer = await Runner.run(
+        starting_agent=agent, 
+        input = message_input.question, 
+        conversation_id=conversation_id,
+    ) 
+    return {
+        'answer' : answer.final_output
+    }
