@@ -8,3 +8,21 @@ Content-Type: application/json
 {
     "question": "What is the first question i asked you?"
 }
+
+###
+# streaming 방식을 사용할 때는 extension 사용 못하고 컴퓨터에 설치된 curl 사용 
+POST http://127.0.0.1:8000/conversations/conv_69d3ac149fd88194bf22b561d5d707b80852bdef060e0e3e/message-stream
+Content-Type: application/json
+
+{
+    "question": "What is the size of the great wall of china?"
+}
+
+curl -N -X POST http://127.0.0.1:8000/conversations/conv_69d3ac149fd88194bf22b561d5d707b80852bdef060e0e3e/message-stream \
+    -H "Content-Type: application/json" \
+    -d '{"question": "What is the size of the great wall of china?"}'
+
+curl -N -X POST http://127.0.0.1:8000/conversations/conv_69d3ac149fd88194bf22b561d5d707b80852bdef060e0e3e/message-stream-all \
+    -H "Content-Type: application/json" \
+    -d '{"question": "What is the size of the great wall of china?"}'
+ 
