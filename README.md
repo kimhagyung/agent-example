@@ -1,10 +1,8 @@
 # AI Agents #21 Deploying Agents Final
-
-이 프로젝트는 OpenAI Agents SDK, LangGraph, 또는 Google SDK Agent를 배포하고 API를 통해 에이전트와 상호작용하는 방법을 다룬다.
-FastAPI를 사용해 서버를 구축하며, Railway를 통해 최종 배포를 진행한다.
-
 ## 1\. 프로젝트 목표
 
+이 프로젝트는 OpenAI Agents SDK, LangGraph, 또는 Google SDK Agent를 배포하고 API를 통해 에이전트와 상호작용하는 방법을 다룬다.
+FastAPI를 사용해 서버를 구축하며, Railway를 통해 최종 배포를 진행
   * 에이전트를 서버에 배포하는 프로세스를 이해
   * API를 통해 배포된 에이전트에 접근하고 실행하는 방법을 학습
   * FastAPI를 활용한 API 문서화 및 테스트 방법을 익힌다. 
